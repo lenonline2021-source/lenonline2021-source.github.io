@@ -1,0 +1,527 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SpringFramework框架-AOP与Task | 楽のsecret base</title><meta name="author" content="楽依"><meta name="copyright" content="楽依"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="AOP（面向切面编程）是一种编程范式，通过分离横切关注点来提升代码模块化，其核心机制基于动态代理，在运行时将切面逻辑织入目标方法的连接点，实现非侵入式的功能增强">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringFramework框架-AOP与Task">
+<meta property="og:url" content="https://leyi.live/2025/12/27/SpringFramework%E6%A1%86%E6%9E%B6-AOP%E4%B8%8ETask/index.html">
+<meta property="og:site_name" content="楽のsecret base">
+<meta property="og:description" content="AOP（面向切面编程）是一种编程范式，通过分离横切关注点来提升代码模块化，其核心机制基于动态代理，在运行时将切面逻辑织入目标方法的连接点，实现非侵入式的功能增强">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://leyi.live/img/SpringFramework.png">
+<meta property="article:published_time" content="2025-12-26T18:22:27.000Z">
+<meta property="article:modified_time" content="2025-12-26T18:24:24.786Z">
+<meta property="article:author" content="楽依">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leyi.live/img/SpringFramework.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SpringFramework框架-AOP与Task",
+  "url": "https://leyi.live/2025/12/27/SpringFramework%E6%A1%86%E6%9E%B6-AOP%E4%B8%8ETask/",
+  "image": "https://leyi.live/img/SpringFramework.png",
+  "datePublished": "2025-12-26T18:22:27.000Z",
+  "dateModified": "2025-12-26T18:24:24.786Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "楽依",
+      "url": "https://leyi.live"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/icon.jpg"><link rel="canonical" href="https://leyi.live/2025/12/27/SpringFramework%E6%A1%86%E6%9E%B6-AOP%E4%B8%8ETask/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SpringFramework框架-AOP与Task',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style>
+  #custom-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0B0B0B;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+  }
+  .loading-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .loading-content span {
+    width: 8vmin;
+    height: 8vmin;
+    border-radius: 4vmin;
+    backface-visibility: hidden;
+    position: absolute;
+    animation-name: loadingMove;
+    animation-timing-function: cubic-bezier(0.4, 0, 1, 0.8);
+    animation-iteration-count: infinite;
+    animation-duration: 3s;
+    top: 50%;
+    left: 50%;
+    transform-origin: -4vmin center;
+  }
+  .loading-content span:nth-child(1) { background: #E5E6E5; animation-delay: -0.5s; opacity: 0; }
+  .loading-content span:nth-child(2) { background: #494A49; animation-delay: -1s; opacity: 0; }
+  .loading-content span:nth-child(3) { background: #8F908F; animation-delay: -1.5s; opacity: 0; }
+  .loading-content span:nth-child(4) { background: #E5E6E5; animation-delay: -2s; opacity: 0; }
+  .loading-content span:nth-child(5) { background: #494A49; animation-delay: -2.5s; opacity: 0; }
+  .loading-content span:nth-child(6) { background: #8F908F; animation-delay: -3s; opacity: 0; }
+  @keyframes loadingMove {
+    0% { transform: scale(1) rotate(0deg) translate3d(0, 0, 1px); }
+    30% { opacity: 1; }
+    100% { z-index: 10; transform: scale(0) rotate(360deg) translate3d(0, 0, 1px); }
+  }
+</style>
+<script>
+  // 立即写入加载动画，不等待任何事件
+  document.write(`
+    <div id="custom-loading">
+      <div class="loading-content">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  `);
+</script>
+<meta name="generator" content="Hexo 8.1.1"></head><body><div id="web_bg" style="background-image: url(/img/background.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/SpringFramework.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/bar0.gif" alt="Logo"><span class="site-name">楽のsecret base</span></a><a class="nav-page-title" href="/"><span class="site-name">SpringFramework框架-AOP与Task</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 链接</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">SpringFramework框架-AOP与Task</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-12-26T18:22:27.000Z" title="Created 2025-12-27 02:22:27">2025-12-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-12-26T18:24:24.786Z" title="Updated 2025-12-27 02:24:24">2025-12-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%80%E6%98%93%E5%BC%80%E5%8F%91/">简易开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="SpringFramework框架-AOP"><a href="#SpringFramework框架-AOP" class="headerlink" title="SpringFramework框架-AOP"></a>SpringFramework框架-AOP</h1><p>AOP（面向切面编程）是一种编程范式，通过分离横切关注点来提升代码模块化，其核心机制基于动态代理，在运行时将切面逻辑织入目标方法的连接点，实现非侵入式的功能增强</p>
+<br/>
+
+<h2 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h2><p>静态代理的实现方式先前已有涉及且较容易理解，此处我会补充一些动态代理的内容 。静态代理的目标对象在程序运行前就已经确定，而动态代理的目标对象在程序运行时创建且目标对象不固定</p>
+<br/>
+
+<h2 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h2><h3 id="newProxyInstance-方法"><a href="#newProxyInstance-方法" class="headerlink" title="newProxyInstance()方法"></a><code>newProxyInstance()</code>方法</h3><p><code>newProxyInstance()</code>方法是<code>Proxy</code>类下的方法，该类是完成代理的操作类，可以通过此方法为一个或多个接口动态生成实现类，该方法接受三个参数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">newProxyInstance</span><span class="params">(ClassLoader loader,Class&lt;?&gt;[] interfaces,InvocationHandler h)</span></span><br></pre></td></tr></table></figure>
+
+<p><code>loader</code>：一个<code>ClassLoader</code>对象，用于定义和加载动态生成的代理类，通常使用与目标接口相同的类加载器</p>
+<p><code>interfaces</code>：一个<code>Interface</code>对象的数组，表示代理对象需要实现的接口，从而可以响应接口中定义的方法调用</p>
+<p><code>h</code>：一个<code>InvocationHandler</code>接口的实现类，作为代理对象的调用处理程序。对代理对象调用方法时，将对方法调用进行编码并将其转发到它的调用处理程序的<code>invoke()</code>方法</p>
+<h3 id="invoke-方法"><a href="#invoke-方法" class="headerlink" title="invoke()方法"></a><code>invoke()</code>方法</h3><p>invoke()方法存在于<code>InvocationHandler</code>接口的实现类，其接受三个参数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span></span><br></pre></td></tr></table></figure>
+
+<p><code>proxy</code>：调用该方法的代理对象</p>
+<p><code>method</code>：要调用的目标对象的方法</p>
+<p><code>args</code>：要调用的方法的参数</p>
+<p>在<code>invoke()</code>方法中可以对目标对象的行为进行增强，但一般都会回到<code>method.invoke(target,args)</code>，容易看出动态代理和静态代理的很大不同在于动态代理的代理对象在运行时被需要时才被创建，而且代理对象不直接调用目标对象，而是将调用请求转发给处理程序进行处理，此时处理程序可以对目标对象的行为进行增强</p>
+<h3 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h3><p>执行<code>newProxyInstance()</code>方法时，程序会在运行时创建一个缓存类<code>$Proxy0</code>，该类继承于<code>Proxy</code>，也是客户端实际上操作的对象，当对<code>$Proxy0</code>对象调用接口声明的方法时，会回调父类的<code>h</code>属性的<code>invoke()</code>方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">protected</span> InvocationHandler h;</span><br></pre></td></tr></table></figure>
+
+<p>该属性在执行<code>newProxyInstance()</code>方法时被赋为传入的<code>InvocationHandler</code>实现类也就是<code>handler</code>，所以调用了<code>handler</code>的<code>invoke()</code>方法，实现了转发</p>
+<p><code>$Proxy0</code>大概长这样，<code>test()</code>是接口定义的方法，<code>this</code>是代理对象本身，呼应了重写<code>invoke()</code>时第一个参数<code>proxy</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> <span class="keyword">throws</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.h.invoke(<span class="built_in">this</span>, m3, (Object[])<span class="literal">null</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RuntimeException | Error var2) &#123;</span><br><span class="line">        <span class="keyword">throw</span> var2;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable var3) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">UndeclaredThrowableException</span>(var3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重写的<code>invoke()</code>的返回值承接了原始对象调用方法后的返回值</p>
+<br/>
+
+<h2 id="CGLIB动态代理"><a href="#CGLIB动态代理" class="headerlink" title="CGLIB动态代理"></a>CGLIB动态代理</h2><p>JDK动态代理要求目标类需实现某些接口，CGLIB代理不依赖接口进行代理而依赖继承机制实现，通过生成一个目标类的子类并覆盖需要代理的方法实现增强，<code>final</code>修饰的类不能通过CBLIB代理</p>
+<h3 id="方法拦截器"><a href="#方法拦截器" class="headerlink" title="方法拦截器"></a>方法拦截器</h3><p>CGLIB动态代理中的方法拦截器类似于JDK动态代理中的<code>InvocationHandler</code>处理器，其作用是在调用目标类方法时对目标类的行为进行增强，方法拦截器需要实现<code>MethodInterceptor</code>该接口定义了一个<code>intercept()</code>方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Object <span class="title function_">intercept</span><span class="params">(Object obj, Method method, Object[] args, MethodProxy proxy)</span> <span class="keyword">throws</span> Throwable;</span><br></pre></td></tr></table></figure>
+
+<p>该方法接受四个参数，<code>obj</code>指向要代理的目标对象，<code>method</code>指向被拦截的方法，<code>args</code>指向被拦截方法的参数，<code>proxy</code>为方法代理，用于调用父类方法</p>
+<p>该方法使用<code>invokeSupera()</code>达到对目标对象的调用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">intercept</span><span class="params">(Object obj, Method method, Object[] args, MethodProxy proxy)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">//前置增强方法</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> proxy.invokeSuper(obj, args);</span><br><span class="line">        <span class="comment">//后置增强方法</span></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Enhancer-增强器"><a href="#Enhancer-增强器" class="headerlink" title="Enhancer ( 增强器 )"></a>Enhancer ( 增强器 )</h3><p>增强器用来动态生成子类代理对象，类似JDK代理创建缓存对象的过程，在创建代理对象前要先对<code>Enhancer</code>对象调用<code>setSupoerclass()</code>方法设置父类（目标类），调用<code>setCallback()</code>方法设置拦截器后才能使用<code>create()</code>方法生成代理对象</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Enhancer</span> <span class="variable">enhancer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Enhancer</span>();</span><br><span class="line">enhancer.setSuperclass(Test.class);</span><br><span class="line">enhancer.setCallback(<span class="keyword">new</span> <span class="title class_">NewInterceptor</span>());</span><br><span class="line"><span class="type">Test</span> <span class="variable">proxy</span> <span class="operator">=</span> (Test) enhancer.create();</span><br><span class="line">proxy.test();</span><br></pre></td></tr></table></figure>
+
+<h3 id="底层实现-1"><a href="#底层实现-1" class="headerlink" title="底层实现"></a>底层实现</h3><p>我们测试一个无参<code>test()</code>方法，执行 <code>Enhancer.create()</code> 方法时，程序会在运行时生成一个继承于目标类的缓存类 <code>TestBean$$EnhancerByCGLIB$$5a33a704</code>，该类是被代理类的子类，也是客户端实际上操作的对象。当对代理对象调用方法时，会回调设置的方法拦截器 <code>MethodInterceptor</code> 的 <code>intercept()</code> 方法，要调用的方法和参数都被转发给了<code>intercept()</code> 方法，生成的缓存子类对应的方法类似如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">MethodInterceptor</span> <span class="variable">var10000</span> <span class="operator">=</span> <span class="built_in">this</span>.CGLIB$CALLBACK_0;</span><br><span class="line">        <span class="keyword">if</span> (var10000 == <span class="literal">null</span>) &#123;</span><br><span class="line">            CGLIB$BIND_CALLBACKS(<span class="built_in">this</span>);</span><br><span class="line">            var10000 = <span class="built_in">this</span>.CGLIB$CALLBACK_0;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (var10000 != <span class="literal">null</span>) &#123;</span><br><span class="line">            var10000.intercept(<span class="built_in">this</span>,CGLIB$methodProxy$<span class="number">0.</span>getMethod(),<span class="keyword">new</span> <span class="title class_">Object</span>[<span class="number">0</span>],CGLIB$methodProxy$<span class="number">0</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">super</span>.methodName();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>回调<code>intercept()</code>时传递的参数</p>
+<p><img src="/img/post/image-20251226205329508.png" alt="image-20251226205329508"></p>
+<p>进入<code>invokeSuper()</code>中</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">invokeSuper</span><span class="params">(Object obj, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.init();</span><br><span class="line">            <span class="type">FastClassInfo</span> <span class="variable">fci</span> <span class="operator">=</span> <span class="built_in">this</span>.fastClassInfo;</span><br><span class="line">            <span class="keyword">return</span> fci.f2.invoke(fci.i2, obj, args);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> e.getTargetException();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>this.fastClassInfo</code>就是传入的<code>MethodPeoxy</code>形参字段，它的两个字段<code>f1</code>和<code>f2</code>分别储存了目标类对象和代理缓存子类，它们都是<code>FastClass</code>类型，其存在是CGLIB为了避免反射调用，进行缓存直接调用以提高性能</p>
+<p><img src="/img/post/image-20251226212839853.png" alt="image-20251226212839853"></p>
+<p>所以我的环境下所以最后执行的实际是</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Bean.TestBean$$EnhancerByCGLIB$$5a33a704.invoke(<span class="number">16</span>, Bean.TestBean$$EnhancerByCGLIB$$5a33a704, <span class="literal">null</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>FastClass</code>类的<code>invoke()</code>方法与正常的不一样，这里调用了自己的一个编号为<code>16</code>的方法，对应的可能是<code>CGLIB$test$0()</code>这样格式的方法，该方法就是直接调用父类也就是目标对象的方法，完成了闭环</p>
+<p>总的来说，代理对象调用方法时，会先回调拦截器，进行行为增强，然后再回到缓存子类直接调用父类的方法去调用目标方法</p>
+<br/>
+
+<h2 id="AOP基本概念"><a href="#AOP基本概念" class="headerlink" title="AOP基本概念"></a>AOP基本概念</h2><p><strong>Joinpoint（连接点）</strong></p>
+<p>被拦截到的每个点，spring中指被拦截到的每一个方法，spring aop一个连接点即代表一个方法的执行</p>
+<p> <strong>Pointcut（切入点）</strong></p>
+<p>对连接点进行拦截的定义（匹配规则定义 规定拦截哪些方法，对哪些方法进行处理），spring有专门的表达式语言定义</p>
+<p><strong>Advice（通知）</strong></p>
+<table>
+<thead>
+<tr>
+<th>通知类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>前置通知（前置增强）</td>
+<td>执行方法前通知</td>
+</tr>
+<tr>
+<td>返回通知（返回增强）</td>
+<td>方法正常结束返回后的通知</td>
+</tr>
+<tr>
+<td>异常抛出通知（异常抛出增强）</td>
+<td>出现异常时的通知</td>
+</tr>
+<tr>
+<td>最终通知</td>
+<td>无论方法是否发生异常，均会执行该通知</td>
+</tr>
+<tr>
+<td>环绕通知</td>
+<td>包围一个连接点（join point）的通知，如方法调用。最强大的一种通知类型，环绕通知可以在方法调用前后完成自定义的行为，它也会选择是否继续执行连接点或直接返回它们自己的返回值或抛出异常</td>
+</tr>
+</tbody></table>
+<p><strong>Aspect（切面）</strong></p>
+<p>切入点与通知的结合，决定了切面的定义，切入点定义了要拦截哪些类的哪些方法，通知则定义了拦截过方法后要做什么，切面则是横切关注点的抽象，与类相似，类是对物体特征的抽象，切面则是横切关注点抽象</p>
+<p><strong>Target（目标对象）</strong></p>
+<p>被代理的目标对象</p>
+<p><strong>Weave（织入）</strong></p>
+<p>将切面应用到目标对象并生成代理对象的这个过程即为织入</p>
+<p><strong>Introduction（引入）</strong></p>
+<p>在不修改原有应用程序代码的情况下，在程序运行期为类动态添加方法或者字段的过程称为引入</p>
+<br/>
+
+<h2 id="AOP实现"><a href="#AOP实现" class="headerlink" title="AOP实现"></a>AOP实现</h2><p>AOP需要引入依赖并在配置文件中添加命名空间</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;</span><br><span class="line"></span><br><span class="line">http://www.springframework.org/schema/aop</span><br><span class="line">http://www.springframework.org/schema/aop/spring-aop.xsd</span><br></pre></td></tr></table></figure>
+
+<h3 id="注解实现"><a href="#注解实现" class="headerlink" title="注解实现"></a>注解实现</h3><p><strong>AOP切入点表达式</strong></p>
+<p>AOP切入点表达式用于匹配<code>@Pointcut</code>注解要拦截的方法，其语法主要由<code>*</code>和<code>.</code>组成。表达式的第部分由指定的访问修饰符组成，有<code>public</code>、<code>private</code>、<code>protected</code>、<code>*</code>四种类型；第二部分可以指定包位置，表示只拦截在该包下的方法，若最后为<code>..</code>代表也包括子包的方法，该部分若为空代表拦截范围为全局；第三部分是要拦截的类名；第四部分为该类的方法名；第五部分为传入该方法的参数</p>
+<table>
+<thead>
+<tr>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>拦截所有公共方法</td>
+<td><code>public *(..)</code></td>
+</tr>
+<tr>
+<td>拦截任意<code>setter</code>方法</td>
+<td><code>* set*(..)</code></td>
+</tr>
+<tr>
+<td>指定某个包下的任意方法</td>
+<td><code>* com.xxx.*.*(..)</code></td>
+</tr>
+<tr>
+<td>指定某个包及其子包下的任意方法</td>
+<td><code>* com.xxx..*.*(..)</code></td>
+</tr>
+</tbody></table>
+<p><strong>具体注解</strong></p>
+<p><code>@Aspect</code>注解标记在一个类上，表示这个类是一个切面</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogAspect</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>@Pointcut</code>注解标记在一个方法上，该方法体必须为空。该方法具有<code>value</code>属性，表示要拦截的方法，该属性使用AOP切入点表达式进行指定</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Pointcut(&quot;execution(* com.example.service.*.*(..))&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">allServiceMethods</span><span class="params">()</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面的注解都声明了一个通知类类型，它们都具有<code>value</code>属性，一般指向<code>@Pointcut</code>注解记在的方法</p>
+<p><code>@Before</code>注解声明前置通知，目标类的方法执行前执行该通知</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Before(&quot;loginMethod()&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">beforeLogin</span><span class="params">()</span> &#123;</span><br><span class="line">	System.out.println(<span class="string">&quot;用户尝试登录...&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>@AfterReturning</code>注解声明返回通知，目标类的方法无异常执行后执该通知</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@AfterReturning(pointcut = &quot;createOrderMethod()&quot;, returning = &quot;orderId&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterCreateOrder</span><span class="params">(Long orderId)</span> &#123;</span><br><span class="line">	System.out.println(<span class="string">&quot;订单创建成功，订单号：&quot;</span> + orderId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>@After</code>注解声明最终通知，目标类的方法执行后不论有无异常都会执行该通知</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@After(&quot;uploadMethod()&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterUpload</span><span class="params">()</span> &#123;</span><br><span class="line">	System.out.println(<span class="string">&quot;文件上传操作结束，清理临时资源&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>@AfterThrowing</code>注解声明异常通知，目标类的方法执行异常时执行该通知</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@AfterThrowing(pointcut = &quot;payMethod()&quot;, throwing = &quot;ex&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterPaymentFailed</span><span class="params">(Exception ex)</span> &#123;</span><br><span class="line">	System.out.println(<span class="string">&quot;支付失败，异常信息：&quot;</span> + ex.getMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>@Around</code>注解环绕通知，目标类的方法执行前后都可通过环绕通知定义响应内容，该通知需要通过显示调用传入的<code>ProceedingJoinPoint</code>对象的<code>proceed()</code>，这相当于明确告诉程序何处为何种通知，<code>proceed()</code>本身不执行任何功能</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Around(&quot;controllerMethods()&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Object <span class="title function_">aroundController</span><span class="params">(ProceedingJoinPoint pjp)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">	System.out.println(<span class="string">&quot;请求开始处理&quot;</span>);</span><br><span class="line">        </span><br><span class="line">	<span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> pjp.proceed();</span><br><span class="line">        </span><br><span class="line">	System.out.println(<span class="string">&quot;请求处理完成&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>@AfterReturning</code>和<code>@AfterThrowing</code>搭配别的属性时一般使用<code>pointcut</code>指定要拦截的方法</p>
+<h3 id="XML实现"><a href="#XML实现" class="headerlink" title="XML实现"></a>XML实现</h3><p>通过配置文件实现AOP不需要修改原先的代码结构，只需要把注解对应修改到配置文件上即可，以先前的例子说，配置文件修改为如下，再删除原切面的注解即可 </p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--aop切面--&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">aop:aspect</span> <span class="attr">ref</span>=<span class="string">&quot;LogAspect&quot;</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--定义aop 切入点 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">&quot;allServiceMethods&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;execution(* com.example.service.*.*(..))&quot;</span>/&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 配置前置通知 指定前置通知方法名 并引用切入点定义 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">aop:before</span> <span class="attr">method</span>=<span class="string">&quot;beforeLogin&quot;</span> <span class="attr">pointcut-ref</span>=<span class="string">&quot;allServiceMethods&quot;</span>/&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 配置返回通知 指定返回通知方法名 并引用切入点定义 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">aop:after-returning</span> <span class="attr">method</span>=<span class="string">&quot;afterCreateOrder&quot;</span> <span class="attr">pointcut-ref</span>=<span class="string">&quot;allServiceMethods&quot;</span>/&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 配置异常通知 指定异常通知方法名 并引用切入点定义 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">aop:after-throwing</span> <span class="attr">method</span>=<span class="string">&quot;afterPaymentFailed&quot;</span> <span class="attr">throwing</span>=<span class="string">&quot;ex&quot;</span> <span class="attr">pointcut-ref</span>=<span class="string">&quot;allServiceMethods&quot;</span>/&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--配置最终通知 指定最终通知方法名 并引用切入点定义 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">aop:after</span> <span class="attr">method</span>=<span class="string">&quot;afterUpload&quot;</span> <span class="attr">pointcut-ref</span>=<span class="string">&quot;allServiceMethods&quot;</span>/&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--配置环绕通知 指定环绕通知方法名，并引用切入点定义--&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">aop:around</span> <span class="attr">method</span>=<span class="string">&quot;aroundController&quot;</span> <span class="attr">pointcut-ref</span>=<span class="string">&quot;allServiceMethods&quot;</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">aop:aspect</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>以上，容易发现AOP就是更加灵活且多样的动态代理模式，目的还是在于目标行为的增强</p>
+<br/>
+
+<h1 id="SpringFramework框架-Task"><a href="#SpringFramework框架-Task" class="headerlink" title="SpringFramework框架-Task"></a>SpringFramework框架-Task</h1><p>Spring Task 是 Spring 框架提供的轻量级定时任务调度组件，用于在 Spring 应用中简单、便捷地实现定时任务。</p>
+<h2 id="XML配置实现"><a href="#XML配置实现" class="headerlink" title="XML配置实现"></a>XML配置实现</h2><p>配置文件添加命名空间</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">xmlns:task=&quot;http://www.springframework.org/schema/task&quot;</span><br><span class="line"></span><br><span class="line">http://www.springframework.org/schema/task</span><br><span class="line">http://www.springframework.org/schema/task/spring-task.xsd</span><br></pre></td></tr></table></figure>
+
+<p>设置定时任务方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShortTask</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;定时任务执行：&quot;</span> + System.currentTimeMillis());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>设置配置文件</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">task:scheduled-tasks</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 定时任务1 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">task:scheduled</span> <span class="attr">ref</span>=<span class="string">&quot;shortTask&quot;</span> <span class="attr">method</span>=<span class="string">&quot;run&quot;</span> <span class="attr">cron</span>=<span class="string">&quot;0/2 * * * * ?&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">task:scheduled-tasks</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>测试类中，只要获得了bean对象就会自动执行方法</p>
+<br/>
+
+<h2 id="注解实现-1"><a href="#注解实现-1" class="headerlink" title="注解实现"></a>注解实现</h2><p><code>@Scheduled</code>注解标记于需要设置定时任务的方法上，该注解具有<code>cron</code>属性，用于写入cron表达式设置相关定时规则</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShortTask</span> &#123;</span><br><span class="line">    <span class="meta">@Scheduled(cron = &quot;0/2 * * * * ?&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;定时任务执行：&quot;</span> + System.currentTimeMillis());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置文件设置定时任务驱动，用于识别<code>@Scheduled</code>注解</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&lt;task:annotation-driven/&gt;</span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h2 id="Corn表达式"><a href="#Corn表达式" class="headerlink" title="Corn表达式"></a>Corn表达式</h2><p>corn表达式的格式为<code>秒 分 时 日 月 周 年(可选)</code></p>
+<h3 id="各字段取值范围和特殊字符"><a href="#各字段取值范围和特殊字符" class="headerlink" title="各字段取值范围和特殊字符"></a>各字段取值范围和特殊字符</h3><table>
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">允许值</th>
+<th align="left">允许的特殊字符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">秒</td>
+<td align="left">0-59</td>
+<td align="left"><code>, - * /</code></td>
+</tr>
+<tr>
+<td align="left">分</td>
+<td align="left">0-59</td>
+<td align="left"><code>, - * /</code></td>
+</tr>
+<tr>
+<td align="left">时</td>
+<td align="left">0-23</td>
+<td align="left"><code>, - * /</code></td>
+</tr>
+<tr>
+<td align="left">日</td>
+<td align="left">1-31</td>
+<td align="left"><code>, - * ? / L W</code></td>
+</tr>
+<tr>
+<td align="left">月</td>
+<td align="left">1-12 或 JAN-DEC</td>
+<td align="left"><code>, - * /</code></td>
+</tr>
+<tr>
+<td align="left">周</td>
+<td align="left">0-7 或 SUN-SAT（0和7都是周日）</td>
+<td align="left"><code>, - * ? / L #</code></td>
+</tr>
+<tr>
+<td align="left">年（可选）</td>
+<td align="left">1970-2099</td>
+<td align="left"><code>, - * /</code></td>
+</tr>
+</tbody></table>
+<h3 id="特殊字符含义"><a href="#特殊字符含义" class="headerlink" title="特殊字符含义"></a>特殊字符含义</h3><table>
+<thead>
+<tr>
+<th align="left">字符</th>
+<th align="left">含义</th>
+<th align="left">示例</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>*</code></td>
+<td align="left">所有值</td>
+<td align="left"><code>* * * * * ?</code></td>
+<td align="left">每秒执行</td>
+</tr>
+<tr>
+<td align="left"><code>?</code></td>
+<td align="left">不指定值</td>
+<td align="left"><code>0 0 10 * * ?</code></td>
+<td align="left">每天10点，不关心周几</td>
+</tr>
+<tr>
+<td align="left"><code>-</code></td>
+<td align="left">区间</td>
+<td align="left"><code>0 0 10-12 * * ?</code></td>
+<td align="left">10点、11点、12点</td>
+</tr>
+<tr>
+<td align="left"><code>,</code></td>
+<td align="left">多个值</td>
+<td align="left"><code>0 0 10,14,18 * * ?</code></td>
+<td align="left">10点、14点、18点</td>
+</tr>
+<tr>
+<td align="left"><code>/</code></td>
+<td align="left">步长</td>
+<td align="left"><code>0 0/5 * * * ?</code></td>
+<td align="left">每5分钟</td>
+</tr>
+<tr>
+<td align="left"><code>L</code></td>
+<td align="left">最后</td>
+<td align="left"><code>0 0 L * * ?</code></td>
+<td align="left">每月最后一天</td>
+</tr>
+<tr>
+<td align="left"><code>W</code></td>
+<td align="left">工作日</td>
+<td align="left"><code>0 0 0 15W * ?</code></td>
+<td align="left">离15号最近的工作日</td>
+</tr>
+<tr>
+<td align="left"><code>#</code></td>
+<td align="left">第几个</td>
+<td align="left"><code>0 0 0 ? * 2#3</code></td>
+<td align="left">每月第3个周二</td>
+</tr>
+</tbody></table>
+<br/>
+
+
+
+
+
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/12/26/SpringFramework%E6%A1%86%E6%9E%B6-IOC/" title="SpringFramework框架-IOC"><img class="cover" src="/img/SpringFramework.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">SpringFramework框架-IOC</div></div><div class="info-2"><div class="info-item-1">IOC（控制反转）是一种设计思想，它将传统程序中由开发者主动创建和管理对象的控制权反转给外部容器。在这种模式下，程序不再通过`new`关键字直接实例化对象，而是由容器负责对象的生命周期管理、依赖注入和配置组装</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">楽依</div><div class="author-info-description">救救菜鸡Orz</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lenonline2021-source"><i class="fab fa-github"></i><span>Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringFramework%E6%A1%86%E6%9E%B6-AOP"><span class="toc-number">1.</span> <span class="toc-text">SpringFramework框架-AOP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">动态代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">JDK动态代理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#newProxyInstance-%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.1.</span> <span class="toc-text">newProxyInstance()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#invoke-%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.2.</span> <span class="toc-text">invoke()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.3.</span> <span class="toc-text">底层实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CGLIB%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">CGLIB动态代理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">方法拦截器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Enhancer-%E5%A2%9E%E5%BC%BA%E5%99%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">Enhancer ( 增强器 )</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0-1"><span class="toc-number">1.3.3.</span> <span class="toc-text">底层实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AOP%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.4.</span> <span class="toc-text">AOP基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AOP%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.5.</span> <span class="toc-text">AOP实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E8%A7%A3%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.5.1.</span> <span class="toc-text">注解实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XML%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.5.2.</span> <span class="toc-text">XML实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringFramework%E6%A1%86%E6%9E%B6-Task"><span class="toc-number">2.</span> <span class="toc-text">SpringFramework框架-Task</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#XML%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.1.</span> <span class="toc-text">XML配置实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E8%A7%A3%E5%AE%9E%E7%8E%B0-1"><span class="toc-number">2.2.</span> <span class="toc-text">注解实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Corn%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">Corn表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%84%E5%AD%97%E6%AE%B5%E5%8F%96%E5%80%BC%E8%8C%83%E5%9B%B4%E5%92%8C%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6"><span class="toc-number">2.3.1.</span> <span class="toc-text">各字段取值范围和特殊字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E5%90%AB%E4%B9%89"><span class="toc-number">2.3.2.</span> <span class="toc-text">特殊字符含义</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/27/SpringFramework%E6%A1%86%E6%9E%B6-AOP%E4%B8%8ETask/" title="SpringFramework框架-AOP与Task"><img src="/img/SpringFramework.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SpringFramework框架-AOP与Task"/></a><div class="content"><a class="title" href="/2025/12/27/SpringFramework%E6%A1%86%E6%9E%B6-AOP%E4%B8%8ETask/" title="SpringFramework框架-AOP与Task">SpringFramework框架-AOP与Task</a><time datetime="2025-12-26T18:22:27.000Z" title="Created 2025-12-27 02:22:27">2025-12-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/SpringFramework%E6%A1%86%E6%9E%B6-IOC/" title="SpringFramework框架-IOC"><img src="/img/SpringFramework.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SpringFramework框架-IOC"/></a><div class="content"><a class="title" href="/2025/12/26/SpringFramework%E6%A1%86%E6%9E%B6-IOC/" title="SpringFramework框架-IOC">SpringFramework框架-IOC</a><time datetime="2025-12-26T05:20:59.000Z" title="Created 2025-12-26 13:20:59">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/25/CommonsCollections%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E5%8F%98%E7%A7%8D/" title="CommonsCollections反序列化链变种"><img src="/img/post12.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CommonsCollections反序列化链变种"/></a><div class="content"><a class="title" href="/2025/12/25/CommonsCollections%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E5%8F%98%E7%A7%8D/" title="CommonsCollections反序列化链变种">CommonsCollections反序列化链变种</a><time datetime="2025-12-24T17:06:36.000Z" title="Created 2025-12-25 01:06:36">2025-12-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/CommonsCollections2%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E7%AE%80%E6%9E%90/" title="CommonsCollections2反序列化链简析"><img src="/img/post11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CommonsCollections2反序列化链简析"/></a><div class="content"><a class="title" href="/2025/12/22/CommonsCollections2%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E7%AE%80%E6%9E%90/" title="CommonsCollections2反序列化链简析">CommonsCollections2反序列化链简析</a><time datetime="2025-12-22T03:44:42.000Z" title="Created 2025-12-22 11:44:42">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/17/Java%E4%BB%A3%E7%90%86%E6%9C%BA%E5%88%B6%E5%8F%8ACC1%E9%93%BE%E6%8B%BE%E9%81%97%E8%A1%A5%E9%98%99/" title="Java代理机制及CC1链拾遗补阙"><img src="/img/post10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java代理机制及CC1链拾遗补阙"/></a><div class="content"><a class="title" href="/2025/12/17/Java%E4%BB%A3%E7%90%86%E6%9C%BA%E5%88%B6%E5%8F%8ACC1%E9%93%BE%E6%8B%BE%E9%81%97%E8%A1%A5%E9%98%99/" title="Java代理机制及CC1链拾遗补阙">Java代理机制及CC1链拾遗补阙</a><time datetime="2025-12-17T10:27:36.000Z" title="Created 2025-12-17 18:27:36">2025-12-17</time></div></div></div></div></div></div></main><footer id="footer" style="background-color: #757575;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By 楽依</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.2</a></span></div><div class="footer_custom_text">你已经抵达世界尽头啦~</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><div class="js-pjax"></div><script>
+  // 页面加载完成后隐藏动画
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      const loadingEl = document.getElementById('custom-loading');
+      if (loadingEl) {
+        loadingEl.style.opacity = '0';
+        setTimeout(function() {
+          if (loadingEl.parentNode) {
+            loadingEl.remove();
+          }
+        }, 500);
+      }
+    }, 1000);
+  });
+</script>
+<script async data-pjax src="/"></script></div></body></html>
