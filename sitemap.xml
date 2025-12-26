@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <url>
+    <loc>https://leyi.live/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/archives/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/tags/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/categories/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/link/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/12/26/SpringFramework%E6%A1%86%E6%9E%B6-IOC/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/categories/%E7%AE%80%E6%98%93%E5%BC%80%E5%8F%91/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/tags/Java/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/12/25/CommonsCollections%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E5%8F%98%E7%A7%8D/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/categories/CTF%E7%9B%B8%E5%85%B3/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/12/22/CommonsCollections2%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E7%AE%80%E6%9E%90/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/12/17/Java%E4%BB%A3%E7%90%86%E6%9C%BA%E5%88%B6%E5%8F%8ACC1%E9%93%BE%E6%8B%BE%E9%81%97%E8%A1%A5%E9%98%99/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/12/15/CommonsCollections1%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E7%AE%80%E6%9E%90/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/categories/%E9%9B%B6%E7%A2%8E/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/tags/php/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/archives/2025/12/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/tags/%E6%8B%BE%E9%81%97%E8%A1%A5%E9%98%99/</loc>
+    <priority>0.99</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/tags/XML/</loc>
+    <priority>0.99</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/archives/2025/11/</loc>
+    <priority>0.97</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/tags/python/</loc>
+    <priority>0.97</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/12/10/%E6%95%A3%E9%A2%9812-10/</loc>
+    <priority>0.91</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/12/14/Java%E6%8B%BE%E9%81%97%E8%A1%A5%E9%98%99/</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/page/2/</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/12/09/JavaAPI/</loc>
+    <priority>0.88</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/12/03/Java%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%9F%BA%E7%A1%80%E8%AF%8D%E6%9D%A1/</loc>
+    <priority>0.88</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/11/28/%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5(XXE)/</loc>
+    <priority>0.88</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/archives/page/2/</loc>
+    <priority>0.82</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/11/26/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5(SSTI)/</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/11/24/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(unserialize)/</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/2025/11/23/Writeup-of-PHPSerializelabs/</loc>
+    <priority>0.79</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/tags/Java/page/2/</loc>
+    <priority>0.77</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/categories/CTF%E7%9B%B8%E5%85%B3/page/2/</loc>
+    <priority>0.77</priority>
+  </url>
+
+  <url>
+    <loc>https://leyi.live/archives/2025/12/page/2/</loc>
+    <priority>0.77</priority>
+  </url>
+
+</urlset>
