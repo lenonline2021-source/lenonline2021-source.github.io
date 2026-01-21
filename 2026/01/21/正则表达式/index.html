@@ -1,0 +1,640 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>正则表达式 | 楽楽依domain</title><meta name="author" content="楽依"><meta name="copyright" content="楽依"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="好氵">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式">
+<meta property="og:url" content="https://leyi.live/2026/01/21/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
+<meta property="og:site_name" content="楽楽依domain">
+<meta property="og:description" content="好氵">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://leyi.live/img/post24.jpg">
+<meta property="article:published_time" content="2026-01-21T13:56:25.000Z">
+<meta property="article:modified_time" content="2026-01-21T14:02:33.964Z">
+<meta property="article:author" content="楽依">
+<meta property="article:tag" content="web CTF freshman">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leyi.live/img/post24.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "正则表达式",
+  "url": "https://leyi.live/2026/01/21/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/",
+  "image": "https://leyi.live/img/post24.jpg",
+  "datePublished": "2026-01-21T13:56:25.000Z",
+  "dateModified": "2026-01-21T14:02:33.964Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "楽依",
+      "url": "https://leyi.live"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/icon.jpg"><link rel="canonical" href="https://leyi.live/2026/01/21/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '正则表达式',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style>
+  #custom-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0B0B0B;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+  }
+  .loading-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .loading-content span {
+    width: 8vmin;
+    height: 8vmin;
+    border-radius: 4vmin;
+    backface-visibility: hidden;
+    position: absolute;
+    animation-name: loadingMove;
+    animation-timing-function: cubic-bezier(0.4, 0, 1, 0.8);
+    animation-iteration-count: infinite;
+    animation-duration: 3s;
+    top: 50%;
+    left: 50%;
+    transform-origin: -4vmin center;
+  }
+  .loading-content span:nth-child(1) { background: #E5E6E5; animation-delay: -0.5s; opacity: 0; }
+  .loading-content span:nth-child(2) { background: #494A49; animation-delay: -1s; opacity: 0; }
+  .loading-content span:nth-child(3) { background: #8F908F; animation-delay: -1.5s; opacity: 0; }
+  .loading-content span:nth-child(4) { background: #E5E6E5; animation-delay: -2s; opacity: 0; }
+  .loading-content span:nth-child(5) { background: #494A49; animation-delay: -2.5s; opacity: 0; }
+  .loading-content span:nth-child(6) { background: #8F908F; animation-delay: -3s; opacity: 0; }
+  @keyframes loadingMove {
+    0% { transform: scale(1) rotate(0deg) translate3d(0, 0, 1px); }
+    30% { opacity: 1; }
+    100% { z-index: 10; transform: scale(0) rotate(360deg) translate3d(0, 0, 1px); }
+  }
+</style>
+<script>
+  // 立即写入加载动画，不等待任何事件
+  document.write(`
+    <div id="custom-loading">
+      <div class="loading-content">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  `);
+</script>
+<meta name="generator" content="Hexo 8.1.1"></head><body><div id="web_bg" style="background-image: url(/img/background.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/post24.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/bar0.gif" alt="Logo"><span class="site-name">楽楽依domain</span></a><a class="nav-page-title" href="/"><span class="site-name">正则表达式</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 链接</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">正则表达式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-01-21T13:56:25.000Z" title="Created 2026-01-21 21:56:25">2026-01-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-01-21T14:02:33.964Z" title="Updated 2026-01-21 22:02:33">2026-01-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9B%B6%E7%A2%8E/">零碎</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><p>正则表达式是一种用于匹配和操作文本的强大工具，它是由一系列字符和特殊字符组成的模式，用于描述要匹配的文本模式</p>
+<br/>
+
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>我们来看一个典型的正则表达式，该表达式用于匹配中国大陆身份证号码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/^(?&lt;province&gt;1[1-5]|2[1-3]|3[1-7]|4[1-6]|5[1-3]|6[1-5]|7[1-3]|8[1-2]|9[1-2])[0-9]&#123;4&#125;(?&lt;birthday&gt;19[0-9]&#123;2&#125;|20[0-1][0-9])(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])(?&lt;sequence&gt;[0-9]&#123;3&#125;)(?&lt;check&gt;[0-9Xx])$/</span><br></pre></td></tr></table></figure>
+
+<p>正则表达式以<code>/^</code>和<code>$/</code>作为<strong>定界符</strong>，分别表示正则表达式的开始与结束，字符 <strong>^</strong> 和 <strong>$</strong> 同时使用时，表示精确匹配</p>
+<p>形如<code>(?&lt;province&gt;...)</code>或 <code>(?&#39;province&#39;...)</code>的结构称为<strong>命名捕获组</strong>，表示将匹配的内容捕获进名为<code>province</code>的组中</p>
+<p><code>1[1-5]|2[1-3]|</code>这表示第一位数字为1时，第二位数字只能为1<del>5中的值，如果第一位数字为2，则第二位数字的取值范围则为1</del>3，因此可见<code>|</code>符号用于表达一种<strong>逻辑或</strong>关系</p>
+<p>在第一个命名捕获组结束后，<code>{4}</code>为<strong>精确数量限定符</strong>，表示前面的模式必须恰好重复4次，用于匹配身份证中的市级、县级地址码，该限定符只对前面的<code>[0-9]</code>有效，表示第一个命名捕获组结束后应接4个任意数字</p>
+<p>后面生日的部分就很好理解了，这里匹配了1900~2019年间出生的人，还有顺序码，匹配三位数字</p>
+<p>最后是校验码，<code>[0-9Xx]</code>表示匹配任意数字和字母<code>X</code>和<code>x</code></p>
+<br/>
+
+<h2 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h2><p>正则表达式中的元字符是具有特殊含义的字符，它们不表示字面意义，而是用于控制匹配模式</p>
+<h3 id="基本元字符"><a href="#基本元字符" class="headerlink" title="基本元字符"></a>基本元字符</h3><table>
+<thead>
+<tr>
+<th align="left">元字符</th>
+<th align="left">功能描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>.</code></strong></td>
+<td align="left">匹配**除换行符(\n)**外的任意单个字符</td>
+<td align="left"><code>a.b</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>^</code></strong></td>
+<td align="left">匹配<strong>字符串的开始位置</strong></td>
+<td align="left"><code>^abc</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>$</code></strong></td>
+<td align="left">匹配<strong>字符串的结束位置</strong></td>
+<td align="left"><code>xyz$</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>\</code></strong></td>
+<td align="left">1. 使特殊字符变为普通字符 2. 使普通字符获得特殊含义</td>
+<td align="left"><code>\d</code></td>
+</tr>
+</tbody></table>
+<h3 id="字符类元字符"><a href="#字符类元字符" class="headerlink" title="字符类元字符"></a>字符类元字符</h3><table>
+<thead>
+<tr>
+<th align="left">元字符</th>
+<th align="left">功能描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>[ ]</code></strong></td>
+<td align="left">定义字符集合，匹配其中任意一个字符</td>
+<td align="left"><code>[aeiou]</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>[^ ]</code></strong></td>
+<td align="left">匹配<strong>不在</strong>方括号中的任意字符</td>
+<td align="left"><code>[^0-9]</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>-</code></strong></td>
+<td align="left">在字符类中表示字符范围</td>
+<td align="left"><code>[a-z]</code>、<code>[0-9A-F]</code></td>
+</tr>
+</tbody></table>
+<h3 id="量词元字符"><a href="#量词元字符" class="headerlink" title="量词元字符"></a>量词元字符</h3><table>
+<thead>
+<tr>
+<th align="left">元字符</th>
+<th align="left">功能描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>\*</code></strong></td>
+<td align="left">匹配前面的子表达式<strong>零次或多次</strong></td>
+<td align="left"><code>ab*c</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>+</code></strong></td>
+<td align="left">匹配前面的子表达式<strong>一次或多次</strong></td>
+<td align="left"><code>ab+c</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>?</code></strong></td>
+<td align="left">匹配前面的子表达式<strong>零次或一次</strong></td>
+<td align="left"><code>colou?r</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>{n}</code></strong></td>
+<td align="left"><strong>精确匹配</strong>前面的子表达式<strong>n次</strong></td>
+<td align="left"><code>a{3}</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>{n,}</code></strong></td>
+<td align="left">匹配前面的子表达式<strong>至少n次</strong></td>
+<td align="left"><code>a{2,}</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>{n,m}</code></strong></td>
+<td align="left">匹配前面的子表达式<strong>n到m次</strong></td>
+<td align="left"><code>a{2,4}</code></td>
+</tr>
+</tbody></table>
+<h3 id="分组和选择元字符"><a href="#分组和选择元字符" class="headerlink" title="分组和选择元字符"></a>分组和选择元字符</h3><table>
+<thead>
+<tr>
+<th align="left">元字符</th>
+<th align="left">功能描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>( )</code></strong></td>
+<td align="left">定义子表达式或捕获组</td>
+<td align="left"><code>(ab)+</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>|</code></strong></td>
+<td align="left">表示逻辑”或”关系</td>
+<td align="left"><code>cat|dog</code></td>
+</tr>
+</tbody></table>
+<h3 id="特殊字符类元字符"><a href="#特殊字符类元字符" class="headerlink" title="特殊字符类元字符"></a>特殊字符类元字符</h3><table>
+<thead>
+<tr>
+<th align="left">元字符</th>
+<th align="left">功能描述</th>
+<th align="left">等价字符类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>\d</code></strong></td>
+<td align="left">匹配任意数字</td>
+<td align="left"><code>[0-9]</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>\D</code></strong></td>
+<td align="left">匹配任意非数字</td>
+<td align="left"><code>[^0-9]</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>\w</code></strong></td>
+<td align="left">匹配任意单词字符（字母、数字、下划线）</td>
+<td align="left"><code>[a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>\W</code></strong></td>
+<td align="left">匹配任意非单词字符</td>
+<td align="left"><code>[^a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>\s</code></strong></td>
+<td align="left">匹配任意空白字符（空格、制表符、换行符等）</td>
+<td align="left"><code>[ \t\r\n\f]</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>\S</code></strong></td>
+<td align="left">匹配任意非空白字符</td>
+<td align="left"><code>[^ \t\r\n\f]</code></td>
+</tr>
+</tbody></table>
+<h3 id="边界匹配元字符"><a href="#边界匹配元字符" class="headerlink" title="边界匹配元字符"></a>边界匹配元字符</h3><table>
+<thead>
+<tr>
+<th align="left">元字符</th>
+<th align="left">功能描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>\b</code></strong></td>
+<td align="left">匹配单词边界（单词与非单词字符的交界处）</td>
+<td align="left"><code>\bcat\b</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>\B</code></strong></td>
+<td align="left">匹配非单词边界</td>
+<td align="left"><code>\Bcat\B</code></td>
+</tr>
+</tbody></table>
+<p><code>\bcat\b</code> 匹配 <code>cat</code> 但不匹配 <code>category</code>，<code>\Bcat\B</code> 匹配 <code>scattered</code>中的 <code>cat</code>但不匹配单独的 <code>cat</code></p>
+<h3 id="其他元字符"><a href="#其他元字符" class="headerlink" title="其他元字符"></a>其他元字符</h3><table>
+<thead>
+<tr>
+<th align="left">元字符</th>
+<th align="left">功能描述</th>
+<th align="left">ASCII值</th>
+<th align="left">常见来源</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>\n</code></strong></td>
+<td align="left">匹配换行符（换行）</td>
+<td align="left">0x0A</td>
+<td align="left">Unix&#x2F;Linux 换行符</td>
+</tr>
+<tr>
+<td align="left"><strong><code>\t</code></strong></td>
+<td align="left">匹配制表符</td>
+<td align="left">0x09</td>
+<td align="left">键盘 Tab 键</td>
+</tr>
+<tr>
+<td align="left"><strong><code>\r</code></strong></td>
+<td align="left">匹配回车符</td>
+<td align="left">0x0D</td>
+<td align="left">老式 Mac 换行符，Windows 换行符的一部分</td>
+</tr>
+<tr>
+<td align="left"><strong><code>\f</code></strong></td>
+<td align="left">匹配换页符</td>
+<td align="left">0x0C</td>
+<td align="left">打印机换页</td>
+</tr>
+<tr>
+<td align="left"><strong><code>\v</code></strong></td>
+<td align="left">匹配垂直制表符</td>
+<td align="left">0x0B</td>
+<td align="left">垂直制表</td>
+</tr>
+</tbody></table>
+<br/>
+
+<h2 id="修饰符"><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h2><p>正则表达式修饰符（也称为模式修饰符或标记）是用于改变正则表达式匹配行为的特殊指令，标记不写在正则表达式里，标记位于表达式之外，格式：<code>/pattern/flags</code></p>
+<table>
+<thead>
+<tr>
+<th align="left">修饰符</th>
+<th align="left">功能描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>i</code></strong></td>
+<td align="left">忽略大小写，使匹配不区分大小写</td>
+<td align="left"><code>/abc/i</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>g</code></strong></td>
+<td align="left">全局匹配，查找所有匹配项而不是第一个就停止</td>
+<td align="left"><code>/ab/g</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>m</code></strong></td>
+<td align="left">多行模式，使 <code>^</code> 和 <code>$</code> 匹配每行的开头和结尾</td>
+<td align="left"><code>/^abc/m</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>s</code></strong></td>
+<td align="left">单行模式，使点号 <code>.</code> 匹配包括换行符在内的所有字符</td>
+<td align="left"><code>/a.b/s</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>u</code></strong></td>
+<td align="left">Unicode模式，启用完整的Unicode支持</td>
+<td align="left"><code>/\p{L}/u</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>y</code></strong></td>
+<td align="left">粘性匹配，从目标字符串的当前位置开始匹配</td>
+<td align="left"><code>/a/y</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>x</code></strong></td>
+<td align="left">扩展模式，忽略模式中的空白和注释</td>
+<td align="left"><code>/a b c/x</code></td>
+</tr>
+</tbody></table>
+<br/>
+
+<h2 id="断言"><a href="#断言" class="headerlink" title="断言"></a>断言</h2><p>断言（Assertion）是正则表达式中用于指定匹配位置的元字符，它们不匹配任何实际字符，而是匹配字符之间的位置</p>
+<table>
+<thead>
+<tr>
+<th align="left">断言类型</th>
+<th align="left">正则语法</th>
+<th align="left">别称</th>
+<th align="left">检查方向</th>
+<th align="left">期望条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>正向先行断言</strong></td>
+<td align="left"><code>(?=pattern)</code></td>
+<td align="left">正前瞻</td>
+<td align="left">向右（向前）</td>
+<td align="left">存在 pattern</td>
+</tr>
+<tr>
+<td align="left"><strong>负向先行断言</strong></td>
+<td align="left"><code>(?!pattern)</code></td>
+<td align="left">负前瞻</td>
+<td align="left">向右（向前）</td>
+<td align="left">不存在 pattern</td>
+</tr>
+<tr>
+<td align="left"><strong>正向后行断言</strong></td>
+<td align="left"><code>(?&lt;=pattern)</code></td>
+<td align="left">正后顾</td>
+<td align="left">向左（向后）</td>
+<td align="left">存在 pattern</td>
+</tr>
+<tr>
+<td align="left"><strong>负向后行断言</strong></td>
+<td align="left"><code>(?&lt;!pattern)</code></td>
+<td align="left">负后顾</td>
+<td align="left">向左（向后）</td>
+<td align="left">不存在 pattern</td>
+</tr>
+</tbody></table>
+<h3 id="功能特点"><a href="#功能特点" class="headerlink" title="功能特点"></a>功能特点</h3><p><strong>零宽度</strong>：只检查条件，不消耗字符（不包含在匹配结果中）</p>
+<p><strong>非捕获</strong>：断言中的 pattern 不会被捕获到分组中</p>
+<p><strong>顺序敏感</strong>：匹配引擎按顺序检查断言条件</p>
+<br/>
+
+<h2 id="运算符优先级"><a href="#运算符优先级" class="headerlink" title="运算符优先级"></a>运算符优先级</h2><p>下表从最高到最低说明了各种正则表达式运算符的优先级顺序</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>\</code></td>
+<td align="left">转义符</td>
+</tr>
+<tr>
+<td align="left"><code>()</code>, <code>(?:)</code>, <code>(?=)</code>, <code>[]</code></td>
+<td align="left">圆括号和方括号（分组和字符类）</td>
+</tr>
+<tr>
+<td align="left"><code>*</code>, <code>+</code>, <code>?</code>, <code>{n}</code>, <code>{n,}</code>, <code>{n,m}</code></td>
+<td align="left">限定符（量词）</td>
+</tr>
+<tr>
+<td align="left"><code>^</code>, <code>$</code>, \任何元字符、任何字符</td>
+<td align="left">定位点和序列（位置和顺序）</td>
+</tr>
+<tr>
+<td align="left"><code>|</code></td>
+<td align="left">替换，逻辑或</td>
+</tr>
+</tbody></table>
+<br/>
+
+<h2 id="分组和引用"><a href="#分组和引用" class="headerlink" title="分组和引用"></a>分组和引用</h2><p>在正则表达式中，<strong>分组</strong>（Grouping）允许我们将多个字符视为一个整体单元</p>
+<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><p>使用圆括号 <code>()</code> 来创建分组：(表达式)</p>
+<p>例如，<code>(ab)+</code> 可以匹配 “ab”、”abab”、”ababab” 等，但不能匹配 “a” 或 “b”</p>
+<h3 id="分组类型"><a href="#分组类型" class="headerlink" title="分组类型"></a>分组类型</h3><table>
+<thead>
+<tr>
+<th align="left">分组类型</th>
+<th align="left">语法</th>
+<th align="left">功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>捕获分组</strong></td>
+<td align="left"><code>(表达式)</code></td>
+<td align="left">捕获匹配内容并分配编号（从1开始）</td>
+</tr>
+<tr>
+<td align="left"><strong>非捕获分组</strong></td>
+<td align="left"><code>(?:表达式)</code></td>
+<td align="left">只分组但不捕获匹配内容</td>
+</tr>
+<tr>
+<td align="left"><strong>命名分组</strong></td>
+<td align="left"><code>(?&lt;name&gt;表达式)</code> 或 <code>(?P&lt;name&gt;表达式)</code></td>
+<td align="left">捕获匹配内容并分配名称</td>
+</tr>
+</tbody></table>
+<h3 id="分组引用"><a href="#分组引用" class="headerlink" title="分组引用"></a>分组引用</h3><table>
+<thead>
+<tr>
+<th align="left">引用类型</th>
+<th align="left">语法</th>
+<th align="left">功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>反向引用（表达式内）</strong></td>
+<td align="left"><code>\数字</code></td>
+<td align="left">在正则表达式内部引用前面捕获分组的内容</td>
+</tr>
+<tr>
+<td align="left"><strong>命名反向引用（表达式内）</strong></td>
+<td align="left"><code>\k&lt;name&gt;</code></td>
+<td align="left">在正则表达式内部引用前面命名分组的内容</td>
+</tr>
+<tr>
+<td align="left"><strong>替换引用（替换操作中）</strong></td>
+<td align="left"><code>$数字</code> 或 <code>\数字</code></td>
+<td align="left">在替换字符串中引用前面捕获分组的内容</td>
+</tr>
+</tbody></table>
+<br/>
+</article><div class="tag_share"></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/01/20/%E6%95%A3%E9%A2%981-20/" title="散题1.20"><img class="cover" src="/img/post23.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">散题1.20</div></div><div class="info-2"><div class="info-item-1">也是跟Moe鏖战一学期了</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">楽依</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lenonline2021-source"><i class="fab fa-github"></i><span>Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">正则表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-number">1.2.</span> <span class="toc-text">元字符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-number">1.2.1.</span> <span class="toc-text">基本元字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E7%B1%BB%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-number">1.2.2.</span> <span class="toc-text">字符类元字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8F%E8%AF%8D%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-number">1.2.3.</span> <span class="toc-text">量词元字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E5%92%8C%E9%80%89%E6%8B%A9%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-number">1.2.4.</span> <span class="toc-text">分组和选择元字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E7%B1%BB%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-number">1.2.5.</span> <span class="toc-text">特殊字符类元字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%B9%E7%95%8C%E5%8C%B9%E9%85%8D%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-number">1.2.6.</span> <span class="toc-text">边界匹配元字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-number">1.2.7.</span> <span class="toc-text">其他元字符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-number">1.3.</span> <span class="toc-text">修饰符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%AD%E8%A8%80"><span class="toc-number">1.4.</span> <span class="toc-text">断言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E7%89%B9%E7%82%B9"><span class="toc-number">1.4.1.</span> <span class="toc-text">功能特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.5.</span> <span class="toc-text">运算符优先级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E5%92%8C%E5%BC%95%E7%94%A8"><span class="toc-number">1.6.</span> <span class="toc-text">分组和引用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-number">1.6.1.</span> <span class="toc-text">基本语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.6.2.</span> <span class="toc-text">分组类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E5%BC%95%E7%94%A8"><span class="toc-number">1.6.3.</span> <span class="toc-text">分组引用</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/01/21/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式"><img src="/img/post24.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正则表达式"/></a><div class="content"><a class="title" href="/2026/01/21/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式">正则表达式</a><time datetime="2026-01-21T13:56:25.000Z" title="Created 2026-01-21 21:56:25">2026-01-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/20/%E6%95%A3%E9%A2%981-20/" title="散题1.20"><img src="/img/post23.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="散题1.20"/></a><div class="content"><a class="title" href="/2026/01/20/%E6%95%A3%E9%A2%981-20/" title="散题1.20">散题1.20</a><time datetime="2026-01-20T07:49:15.000Z" title="Created 2026-01-20 15:49:15">2026-01-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/18/JNDI%E6%B3%A8%E5%85%A5/" title="JNDI注入"><img src="/img/post22.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JNDI注入"/></a><div class="content"><a class="title" href="/2026/01/18/JNDI%E6%B3%A8%E5%85%A5/" title="JNDI注入">JNDI注入</a><time datetime="2026-01-18T07:38:32.000Z" title="Created 2026-01-18 15:38:32">2026-01-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/16/Agent%E5%8F%8A%E5%85%B6%E5%86%85%E5%AD%98%E9%A9%AC%E5%AE%9E%E7%8E%B0/" title="Java Agent及其内存马实现"><img src="/img/post21.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java Agent及其内存马实现"/></a><div class="content"><a class="title" href="/2026/01/16/Agent%E5%8F%8A%E5%85%B6%E5%86%85%E5%AD%98%E9%A9%AC%E5%AE%9E%E7%8E%B0/" title="Java Agent及其内存马实现">Java Agent及其内存马实现</a><time datetime="2026-01-16T14:28:41.000Z" title="Created 2026-01-16 22:28:41">2026-01-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/15/Tomcat%20Valve%E5%86%85%E5%AD%98%E9%A9%AC/" title="Tomcat Valve内存马"><img src="/img/post20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Tomcat Valve内存马"/></a><div class="content"><a class="title" href="/2026/01/15/Tomcat%20Valve%E5%86%85%E5%AD%98%E9%A9%AC/" title="Tomcat Valve内存马">Tomcat Valve内存马</a><time datetime="2026-01-15T07:03:19.000Z" title="Created 2026-01-15 15:03:19">2026-01-15</time></div></div></div></div></div></div></main><footer id="footer" style="background-color: #757575;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 楽依</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.2</a></span></div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">湘ICP备2026002198号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><div class="js-pjax"></div><script>
+  // 页面加载完成后隐藏动画
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      const loadingEl = document.getElementById('custom-loading');
+      if (loadingEl) {
+        loadingEl.style.opacity = '0';
+        setTimeout(function() {
+          if (loadingEl.parentNode) {
+            loadingEl.remove();
+          }
+        }, 500);
+      }
+    }, 1000);
+  });
+</script>
+<script async data-pjax src="/"></script></div></body></html>
